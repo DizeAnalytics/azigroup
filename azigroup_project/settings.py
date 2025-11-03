@@ -36,6 +36,10 @@ ALLOWED_HOSTS = config(
     cast=lambda v: [s.strip() for s in v.split(',') if s.strip()],
 )
 
+# Always include safe defaults and the PythonAnywhere domain
+_default_allowed = ['localhost', '127.0.0.1', 'dzanalytic.pythonanywhere.com']
+ALLOWED_HOSTS = list(dict.fromkeys([*ALLOWED_HOSTS, *_default_allowed]))
+
 
 # Application definition
 
