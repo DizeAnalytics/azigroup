@@ -1,0 +1,79 @@
+{% extends 'website/base.html' %}
+{% load static %}
+
+{% block title %}{{ company.name }} - AZI GROUP{% endblock %}
+
+{% block content %}
+<section class="hero{% if company.logo %} company-hero-section{% endif %}"
+    {% if company.logo %}
+    style="background-image: url('{{ company.logo.url }}'); background-size: cover; background-position: center; background-repeat: no-repeat;"
+    {% endif %}>
+    <div class="company-hero">
+        <h1 style="color: #00ff00 !important;">{{ company.icon }} {{ company.name }}</h1>
+        <p style="color: #00ff00 !important;">{{ company.description }}</p>
+    </div>
+</section>
+
+<section>
+    <div class="company-detail">
+        <!-- Description détaillée -->
+        {% if company.detailed_description %}
+        <div class="company-description-section">
+            <h2>À Propos de {{ company.name }}</h2>
+            <div class="detailed-description">
+                {{ company.detailed_description|linebreaks }}
+            </div>
+        </div>
+        {% endif %}
+        
+        <!-- Domaines clés et KPI -->
+        <div class="company-content-grid">
+            <div class="services-section">
+                <h3>Domaines clés</h3>
+                <ul class="services-list">
+                    {% for service in company.get_services_list %}
+                    <li>{{ service }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            
+            <div class="kpis-section">
+                <h3>KPI Cibles</h3>
+                <ul class="kpis-list">
+                    {% for kpi in company.get_kpis_list %}
+                    <li>{{ kpi }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Images des projets récents -->
+        {% if company.project_images.all %}
+        <div class="projects-section">
+            <h2>Projets Réalisés Récemment</h2>
+            <div class="projects-gallery">
+                {% for project in company.project_images.all %}
+                <div class="project-item">
+                    <div class="project-image">
+                        <img src="{{ project.image.url }}" alt="{{ project.title }}" class="project-img">
+                        <div class="project-overlay">
+                            <h4>{{ project.title }}</h4>
+                            {% if project.description %}
+                            <p>{{ project.description }}</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+        
+        <!-- Actions -->
+        <div class="company-actions">
+            <a href="{% url 'website:contact' %}" class="btn btn-primary">Nous contacter</a>
+            <a href="{% url 'website:companies' %}" class="btn btn-secondary">Retour aux entreprises</a>
+        </div>
+    </div>
+</section>
+{% endblock %}

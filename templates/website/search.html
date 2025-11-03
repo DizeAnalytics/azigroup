@@ -1,0 +1,57 @@
+{% extends 'website/base.html' %}
+
+{% block title %}Recherche - AZI GROUP{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <h1>Recherche</h1>
+    <p>Trouvez ce que vous cherchez</p>
+</section>
+
+<section>
+    <div class="search-form">
+        <form method="GET" action="{% url 'website:search' %}">
+            <div class="search-input-group">
+                <input type="text" name="q" value="{{ query }}" placeholder="Rechercher..." class="search-input">
+                <button type="submit" class="search-btn">Rechercher</button>
+            </div>
+        </form>
+    </div>
+    
+    {% if query %}
+    <div class="search-results">
+        <h2>Résultats pour "{{ query }}"</h2>
+        
+        {% if results.news %}
+        <div class="results-section">
+            <h3>Actualités ({{ results.news.count }})</h3>
+            {% for news_item in results.news %}
+            <div class="result-item">
+                <h4><a href="{% url 'website:news_detail' news_item.slug %}">{{ news_item.title }}</a></h4>
+                <p>{{ news_item.get_excerpt }}</p>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        
+        {% if results.companies %}
+        <div class="results-section">
+            <h3>Entreprises ({{ results.companies.count }})</h3>
+            {% for company in results.companies %}
+            <div class="result-item">
+                <h4><a href="{% url 'website:company_detail' company.slug %}">{{ company.name }}</a></h4>
+                <p>{{ company.description }}</p>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        
+        {% if not results.news and not results.companies %}
+        <div class="no-results">
+            <p>Aucun résultat trouvé pour "{{ query }}".</p>
+        </div>
+        {% endif %}
+    </div>
+    {% endif %}
+</section>
+{% endblock %}

@@ -1,0 +1,56 @@
+{% extends 'website/base.html' %}
+{% load static %}
+
+{% block title %}À Propos - AZI GROUP{% endblock %}
+
+{% block extra_css %}
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section avec logo en background et overlay transparent -->
+{% if navbar_logo_url %}
+<section class="hero about-hero" style="background-image: url('{{ navbar_logo_url }}'); background-size: cover; background-position: center; background-repeat: no-repeat;">
+{% elif navigation_logo and navigation_logo.logo %}
+<section class="hero about-hero" style="background-image: url('{{ navigation_logo.logo.url }}'); background-size: cover; background-position: center; background-repeat: no-repeat;">
+{% else %}
+<section class="hero about-hero" style="background-image: url('{% static 'images/AZI GROUP.PNG' %}'); background-size: cover; background-position: center; background-repeat: no-repeat;">
+{% endif %}
+    <div class="about-overlay">
+        <h1>À Propos d'AZI GROUP</h1>
+        <p>Notre mission, nos valeurs et notre vision</p>
+    </div>
+</section>
+
+<section>
+    <div class="about-content">
+        <h2>Notre Mission</h2>
+        <p>AZI Group s'engage à fournir des solutions opérationnelles complètes et fiables aux organisations internationales et aux ONGs opérant en Afrique de l'Ouest. Nous transformons les défis complexes en résultats mesurables grâce à notre expertise locale et notre approche structurée.</p>
+        
+        <h2>Nos Valeurs</h2>
+        <div class="values-grid">
+            <div class="value-card">
+                <h3>🎯 Excellence Opérationnelle</h3>
+                <p>Nous nous engageons à livrer des résultats de qualité supérieure dans les délais convenus.</p>
+            </div>
+            <div class="value-card">
+                <h3>🤝 Transparence</h3>
+                <p>Communication claire, reporting détaillé et traçabilité complète de nos activités.</p>
+            </div>
+            <div class="value-card">
+                <h3>🌍 Impact Local</h3>
+                <p>Formation et développement des équipes locales pour un impact durable.</p>
+            </div>
+            <div class="value-card">
+                <h3>⚡ Innovation</h3>
+                <p>Amélioration continue de nos processus et adoption des meilleures pratiques.</p>
+            </div>
+        </div>
+        
+        <h2>Notre Vision</h2>
+        <p>Devenir le partenaire de référence pour l'excellence opérationnelle en Afrique de l'Ouest, en permettant aux organisations internationales de se concentrer sur leur cœur de métier tout en bénéficiant d'une exécution locale de qualité.</p>
+        
+        <h2>Notre Équipe</h2>
+        <p>Notre équipe combine une expertise technique approfondie avec une connaissance intime du contexte local. Nous comprenons les défis spécifiques de l'Afrique de l'Ouest et adaptons nos solutions en conséquence.</p>
+    </div>
+</section>
+{% endblock %}

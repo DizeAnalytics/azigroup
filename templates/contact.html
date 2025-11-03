@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% block title %}Contact - AZI GROUP{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <h1>Contactez-Nous</h1>
+    <p>Nous sommes là pour répondre à vos besoins</p>
+</section>
+
+<section class="contact-section">
+    <div class="contact-container">
+        <form class="contact-form" method="POST">
+            <div class="form-group">
+                <label for="name">Nom complet *</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email *</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+
+            <div class="form-group">
+                <label for="phone">Téléphone</label>
+                <input type="tel" id="phone" name="phone">
+            </div>
+
+            <div class="form-group">
+                <label for="company">Entreprise/Organisation</label>
+                <input type="text" id="company" name="company">
+            </div>
+
+            <div class="form-group">
+                <label for="service">Service concerné</label>
+                <select id="service" name="service">
+                    <option value="">-- Sélectionnez --</option>
+                    <option value="gss">Global Songhoy Services (GSS)</option>
+                    <option value="sogis">Sogis - Immobilier</option>
+                    <option value="golden">Société Golden - Transport</option>
+                    <option value="angnie">Angnie Mali - Propreté</option>
+                    <option value="autre">Autre</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="message">Message *</label>
+                <textarea id="message" name="message" required></textarea>
+            </div>
+
+            <button type="submit" class="submit-btn">Envoyer le message</button>
+        </form>
+
+        <div class="contact-info">
+            <div class="contact-info-item">
+                <strong>📍 Adresse :</strong> Mali, Afrique de l'Ouest
+            </div>
+            <div class="contact-info-item">
+                <strong>📧 Email :</strong> contact@azigroup.com
+            </div>
+            <div class="contact-info-item">
+                <strong>📞 Téléphone :</strong> +223 XX XX XX XX
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

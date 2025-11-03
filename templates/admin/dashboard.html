@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+
+{% block title %}Administration - AZI GROUP{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <h1>Tableau de Bord Administrateur</h1>
+    <p>Gérez le contenu de votre site web</p>
+</section>
+
+<section>
+    <div class="admin-dashboard">
+        <div class="dashboard-stats">
+            <div class="stat-card">
+                <h3>{{ contacts|length }}</h3>
+                <p>Messages récents</p>
+            </div>
+            <div class="stat-card">
+                <h3>{{ companies|length }}</h3>
+                <p>Entreprises</p>
+            </div>
+            <div class="stat-card">
+                <h3>{{ news_count }}</h3>
+                <p>Articles d'actualité</p>
+            </div>
+        </div>
+
+        <div class="dashboard-sections">
+            <div class="admin-section">
+                <h2>Messages de Contact Récents</h2>
+                <div class="admin-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Nom</th>
+                                <th>Email</th>
+                                <th>Service</th>
+                                <th>Date</th>
+                                <th>Statut</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for contact in contacts %}
+                            <tr>
+                                <td>{{ contact.name }}</td>
+                                <td>{{ contact.email }}</td>
+                                <td>{{ contact.service or 'Non spécifié' }}</td>
+                                <td>{{ contact.created_at.strftime('%d/%m/%Y') }}</td>
+                                <td>
+                                    <span class="status status-{{ contact.status }}">{{ contact.status }}</span>
+                                </td>
+                                <td>
+                                    <a href="{{ url_for('admin_contacts') }}" class="btn btn-sm">Voir</a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="admin-actions">
+                    <a href="{{ url_for('admin_contacts') }}" class="btn btn-primary">Voir tous les messages</a>
+                </div>
+            </div>
+
+            <div class="admin-section">
+                <h2>Gestion du Contenu</h2>
+                <div class="admin-links">
+                    <a href="{{ url_for('admin_companies') }}" class="admin-link">
+                        <h3>🏢 Gérer les Entreprises</h3>
+                        <p>Modifier les informations des groupements</p>
+                    </a>
+                    <a href="{{ url_for('admin_news') }}" class="admin-link">
+                        <h3>📰 Gérer les Actualités</h3>
+                        <p>Ajouter et modifier les articles</p>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

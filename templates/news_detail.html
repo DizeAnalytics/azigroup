@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}{{ news.title }} - AZI GROUP{% endblock %}
+
+{% block content %}
+<section class="news-detail-header">
+    <h1 class="news-activity-title">NOUVELLE ACTIVITE</h1>
+    <p class="news-date">{{ news.created_at.strftime('%d/%m/%Y') }}</p>
+</section>
+
+<section>
+    <article class="news-detail-simple">
+        {% if news.image_url %}
+        <div class="news-image">
+            <img src="{{ news.image_url }}" alt="{{ news.title }}">
+        </div>
+        {% endif %}
+        
+        <div class="news-content">
+            {{ news.content|safe }}
+        </div>
+        
+        <div class="news-navigation">
+            <a href="{{ url_for('news') }}" class="btn btn-secondary">← Retour aux actualités</a>
+        </div>
+    </article>
+</section>
+{% endblock %}

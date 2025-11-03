@@ -1,0 +1,197 @@
+{% extends 'website/base.html' %}
+{% load static %}
+
+{% block content %}
+<!-- Hero Section -->
+{% if hero_section %}
+<section id="accueil" class="hero" style="background-image: url('{{ hero_section.background_image.url }}'); background-size: cover; background-position: center; background-repeat: no-repeat;">
+    <div class="hero-overlay" style="opacity: {{ hero_section.overlay_opacity }};">
+        <!-- Image de fond uniquement -->
+    </div>
+</section>
+{% else %}
+<!-- Fallback si aucune section hero n'est configurée -->
+<section id="accueil" class="hero" style="background-image: url('{% static 'images/AZI GROUP.PNG' %}'); background-size: cover; background-position: center; background-repeat: no-repeat;">
+    <div class="hero-overlay">
+        <!-- Image de fond uniquement -->
+    </div>
+</section>
+{% endif %}
+
+<!-- Section de présentation -->
+<section class="presentation-section">
+    <div class="presentation-content">
+        <h1 class="presentation-title">AZI GROUP</h1>
+        <p class="presentation-subtitle">Excellence Opérationnelle au Service de l'Impact en Afrique de l'Ouest</p>
+    </div>
+</section>
+
+<!-- About Section -->
+<section id="apropos">
+    <h2 class="section-title">Qui Sommes-Nous ?</h2>
+    <div class="about-content">
+        <p>AZI Group est un groupement entrepreneurial qui opère l'essentiel des besoins des grandes organisations et des ONGs au Mali et en Afrique de l'Ouest. Notre écosystème réunit <strong>Global Songhoy Services</strong> (aménagements hydro-agricoles, forages d'eau, BTP, commerce général), <strong>Sogis</strong> (immobilier & facility management), <strong>Société Golden</strong> (transport & logistique) et <strong>Angnie Mali</strong> (propreté & sanitation).</p>
+        
+        <p style="margin-top: 1.5rem;">Nous livrons des opérations fiables, conformes et mesurées grâce à des KPI contractuels, une traçabilité complète des activités et des standards HSE exigeants. Notre promesse : transformer des cahiers des charges complexes en résultats concrets, dans les délais et budgets convenus, avec un reporting transparent et des équipes locales formées.</p>
+        
+        <p style="margin-top: 1.5rem;">Qu'il s'agisse de projets d'infrastructures rurales, de points d'eau, d'ouverture de bureaux, de mobilité du personnel ou de propreté multi-sites, AZI Group offre un interlocuteur unique, une exécution disciplinée et une amélioration continue au service de l'impact.</p>
+    </div>
+</section>
+
+<!-- Companies Section -->
+<section id="groupements">
+    <h2 class="section-title">Nos Groupements</h2>
+    <div class="companies-grid">
+        {% for company in companies %}
+        <div class="company-card">
+            <div class="company-image" style="background: {{ company.gradient }};">
+                {% if company.logo %}
+                <div class="company-logo">
+                    <img src="{{ company.logo.url }}" alt="{{ company.name }}" class="logo-img">
+                </div>
+                {% else %}
+                <div class="company-icon-large">{{ company.icon }}</div>
+                {% endif %}
+            </div>
+            <div class="company-content">
+                <h3>{{ company.icon }} {{ company.name }}</h3>
+                <p><strong>{{ company.description }}</strong></p>
+                
+                <h4>Domaines clés</h4>
+                <ul>
+                    {% for service in company.get_services_list %}
+                    <li>{{ service }}</li>
+                    {% endfor %}
+                </ul>
+                
+                <h4>KPI Cibles</h4>
+                <ul>
+                    {% for kpi in company.get_kpis_list %}
+                    <li>{{ kpi }}</li>
+                    {% endfor %}
+                </ul>
+                
+                <div class="company-actions">
+                    <a href="{% url 'website:company_detail' company.slug %}" class="btn btn-primary">En savoir plus</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+<!-- News Section -->
+{% if news %}
+<section id="actualites">
+    <h2 class="section-title">Dernières Actualités</h2>
+    <div class="news-grid">
+        {% for news_item in news %}
+        <div class="news-card">
+            <div class="news-image">
+                {% if news_item.get_image_url %}
+                <img src="{{ news_item.get_image_url }}" alt="{{ news_item.title }}">
+                {% else %}
+                <div class="news-placeholder">📰</div>
+                {% endif %}
+            </div>
+            <div class="news-content">
+                <h3>{{ news_item.title }}</h3>
+                <p class="news-excerpt">{{ news_item.get_excerpt }}</p>
+                <div class="news-meta">
+                    <span class="news-date">{{ news_item.created_at|date:"d/m/Y" }}</span>
+                    <a href="{% url 'website:news_detail' news_item.slug %}" class="read-more">Lire la suite</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <div class="news-cta">
+        <a href="{% url 'website:news_list' %}" class="btn btn-primary">Voir toutes les actualités</a>
+    </div>
+</section>
+{% endif %}
+
+<!-- Testimonials Section -->
+{% if testimonials %}
+<section id="temoignages">
+    <h2 class="section-title">Témoignages Clients</h2>
+    <div class="testimonials-grid">
+        {% for testimonial in testimonials %}
+        <div class="testimonial-card">
+            <div class="testimonial-content">
+                <p>"{{ testimonial.content }}"</p>
+                <div class="testimonial-rating">{{ testimonial.get_stars }}</div>
+            </div>
+            <div class="testimonial-author">
+                <div class="author-info">
+                    <h4>{{ testimonial.name }}</h4>
+                    <p>{{ testimonial.position }}, {{ testimonial.company }}</p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+{% endif %}
+
+<!-- Contact Section -->
+<section id="contact" class="contact-section">
+    <div class="contact-container">
+        <h2 class="section-title" style="color: white;">Contactez-Nous</h2>
+        
+        <form class="contact-form" method="POST" action="{% url 'website:contact' %}">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="name">Nom complet *</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email *</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+
+            <div class="form-group">
+                <label for="phone">Téléphone</label>
+                <input type="tel" id="phone" name="phone">
+            </div>
+
+            <div class="form-group">
+                <label for="company">Entreprise/Organisation</label>
+                <input type="text" id="company" name="company">
+            </div>
+
+            <div class="form-group">
+                <label for="service">Service concerné</label>
+                <select id="service" name="service">
+                    <option value="">-- Sélectionnez --</option>
+                    <option value="azi_group">AZI GROUP</option>
+                    <option value="gss">Global Songhoy Services (GSS)</option>
+                    <option value="sogis">Sogis - Immobilier</option>
+                    <option value="golden">Société Golden - Transport</option>
+                    <option value="angnie">Angnie Mali - Propreté</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="message">Message *</label>
+                <textarea id="message" name="message" required></textarea>
+            </div>
+
+            <button type="submit" class="submit-btn">Envoyer le message</button>
+        </form>
+
+        <div class="contact-info">
+            <div class="contact-info-item">
+                <strong>📍 Adresse :</strong> Mali, Afrique de l'Ouest
+            </div>
+            <div class="contact-info-item">
+                <strong>📧 Email :</strong> contact@azigroup.com
+            </div>
+            <div class="contact-info-item">
+                <strong>📞 Téléphone :</strong> +223 XX XX XX XX
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

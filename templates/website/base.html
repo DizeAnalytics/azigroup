@@ -1,0 +1,154 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}AZI GROUP - Excellence Opérationnelle en Afrique de l'Ouest{% endblock %}</title>
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}?v=7">
+    <style>
+        /* Styles inline pour contourner le cache */
+        .logo-link,
+        .logo-link:visited,
+        .logo-link:hover,
+        .logo-link:active {
+            color: #fff !important;
+            text-decoration: none !important;
+        }
+        .logo-text {
+            color: #fff !important;
+        }
+        .logo-img {
+            height: 20px !important;
+            width: auto !important;
+            object-fit: contain !important;
+            filter: none !important;
+        }
+        .logo-text {
+            font-size: 1rem !important;
+        }
+        .company-logo .logo-img {
+            width: 100% !important;
+            height: 100% !important;
+            object-fit: cover !important;
+            filter: none !important;
+        }
+        .company-logo {
+            padding: 0 !important;
+        }
+    </style>
+    {% block extra_css %}{% endblock %}
+    
+    <!-- Meta tags pour le SEO -->
+    <meta name="description" content="{% block meta_description %}AZI Group - Excellence Opérationnelle au Service de l'Impact en Afrique de l'Ouest. Nos groupements : Global Songhoy Services, Sogis, Société Golden, Angnie Mali.{% endblock %}">
+    <meta name="keywords" content="{% block meta_keywords %}AZI Group, Mali, Afrique de l'Ouest, services, entreprise, infrastructure, développement{% endblock %}">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="{% block og_title %}AZI GROUP{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}AZI Group - Excellence Opérationnelle au Service de l'Impact en Afrique de l'Ouest{% endblock %}">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ request.build_absolute_uri }}">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="{% static 'images/favicon.ico' %}">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav>
+            <div class="logo">
+                <a href="{% url 'website:index' %}" class="logo-link" aria-label="Accueil">
+                    {% if navbar_logo_url %}
+                    <img src="{{ navbar_logo_url }}" alt="{{ navigation_logo.name|default:'AZI GROUP' }}" class="logo-img">
+                    <span class="logo-text">{{ navigation_logo.name|default:'AZI GROUP' }}</span>
+                    {% elif navigation_logo and navigation_logo.logo %}
+                    <img src="{{ navigation_logo.logo.url }}" alt="{{ navigation_logo.name|default:'AZI GROUP' }}" class="logo-img">
+                    <span class="logo-text">{{ navigation_logo.name|default:'AZI GROUP' }}</span>
+                    {% else %}
+                    <img src="{% static 'images/AZI GROUP.PNG' %}" alt="AZI GROUP" class="logo-img">
+                    <span class="logo-text">AZI GROUP</span>
+                    {% endif %}
+                </a>
+            </div>
+            <div class="hamburger" onclick="toggleMenu()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="{% url 'website:index' %}" onclick="closeMenu()">Accueil</a></li>
+                <li><a href="{% url 'website:about' %}" onclick="closeMenu()">À Propos</a></li>
+                <li><a href="{% url 'website:companies' %}" onclick="closeMenu()">Nos Groupements</a></li>
+                <li><a href="{% url 'website:news_list' %}" onclick="closeMenu()">Actualités</a></li>
+                <li><a href="{% url 'website:contact' %}" onclick="closeMenu()">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Messages Flash -->
+    {% if messages %}
+        <div class="flash-messages">
+            {% for message in messages %}
+                <div class="flash-message flash-{{ message.tags }}">
+                    {{ message }}
+                    <button onclick="this.parentElement.remove()">&times;</button>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <!-- Main Content -->
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>AZI GROUP</h3>
+                <p>Excellence opérationnelle au service de l'impact en Afrique de l'Ouest.</p>
+            </div>
+
+            <div class="footer-section">
+                <h3>Nos Groupements</h3>
+                <ul>
+                    {% for company in companies %}
+                    <li><a href="{% url 'website:company_detail' company.slug %}">{{ company.name }}</a></li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h3>Liens Rapides</h3>
+                <ul>
+                    <li><a href="{% url 'website:index' %}">Accueil</a></li>
+                    <li><a href="{% url 'website:about' %}">À Propos</a></li>
+                    <li><a href="{% url 'website:companies' %}">Nos Groupements</a></li>
+                    <li><a href="{% url 'website:news_list' %}">Actualités</a></li>
+                    <li><a href="{% url 'website:contact' %}">Contact</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h3>Suivez-nous</h3>
+                <ul>
+                    <li><a href="#">LinkedIn</a></li>
+                    <li><a href="#">Facebook</a></li>
+                    <li><a href="#">Twitter</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2025 AZI GROUP. Tous droits réservés.</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="{% static 'js/main.js' %}"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

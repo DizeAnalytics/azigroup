@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}Nos Groupements - AZI GROUP{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <h1>Nos Groupements</h1>
+    <p>Découvrez nos entreprises spécialisées</p>
+</section>
+
+<section>
+    <div class="companies-grid">
+        {% for company in companies %}
+        <div class="company-card">
+            <div class="company-image" style="background: {{ company.gradient }};">
+                {{ company.icon }}
+                <div class="image-placeholder">Insérez votre image ici</div>
+            </div>
+            <div class="company-content">
+                <h3>{{ company.icon }} {{ company.name }}</h3>
+                <p><strong>{{ company.description }}</strong></p>
+                
+                <h4>Domaines clés</h4>
+                <ul>
+                    {% for service in company.services|from_json %}
+                    <li>{{ service }}</li>
+                    {% endfor %}
+                </ul>
+                
+                <h4>KPI Cibles</h4>
+                <ul>
+                    {% for kpi in company.kpis|from_json %}
+                    <li>{{ kpi }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}

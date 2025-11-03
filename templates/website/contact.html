@@ -1,0 +1,95 @@
+{% extends 'website/base.html' %}
+{% load static %}
+
+{% block title %}Contact - AZI GROUP{% endblock %}
+
+{% block extra_css %}
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section avec logo en background et overlay transparent -->
+{% if navbar_logo_url %}
+<section class="hero contact-hero" style="background-image: url('{{ navbar_logo_url }}'); background-size: cover; background-position: center; background-repeat: no-repeat;">
+{% elif navigation_logo and navigation_logo.logo %}
+<section class="hero contact-hero" style="background-image: url('{{ navigation_logo.logo.url }}'); background-size: cover; background-position: center; background-repeat: no-repeat;">
+{% else %}
+<section class="hero contact-hero" style="background-image: url('{% static 'images/AZI GROUP.PNG' %}'); background-size: cover; background-position: center; background-repeat: no-repeat;">
+{% endif %}
+    <div class="contact-overlay">
+        <h1>Contactez-Nous</h1>
+        <p>Nous sommes là pour répondre à vos besoins</p>
+    </div>
+</section>
+
+<section class="contact-section">
+    <div class="contact-container">
+        <h2 class="section-title" style="color: white;">Contactez-Nous</h2>
+        
+        <form class="contact-form" method="POST" action="{% url 'website:contact' %}">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="name">Nom complet *</label>
+                <input type="text" id="name" name="name" required value="{{ form.name.value|default:'' }}">
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email *</label>
+                <input type="email" id="email" name="email" required value="{{ form.email.value|default:'' }}">
+            </div>
+
+            <div class="form-group">
+                <label for="phone">Téléphone</label>
+                <input type="tel" id="phone" name="phone" value="{{ form.phone.value|default:'' }}">
+            </div>
+
+            <div class="form-group">
+                <label for="company">Entreprise/Organisation</label>
+                <input type="text" id="company" name="company" value="{{ form.company.value|default:'' }}">
+            </div>
+
+            <div class="form-group">
+                <label for="service">Service concerné</label>
+                <select id="service" name="service">
+                    <option value="">-- Sélectionnez --</option>
+                    <option value="azi_group" {% if form.service.value == 'azi_group' %}selected{% endif %}>AZI GROUP</option>
+                    <option value="gss" {% if form.service.value == 'gss' %}selected{% endif %}>Global Songhoy Services (GSS)</option>
+                    <option value="sogis" {% if form.service.value == 'sogis' %}selected{% endif %}>Sogis - Immobilier</option>
+                    <option value="golden" {% if form.service.value == 'golden' %}selected{% endif %}>Société Golden - Transport</option>
+                    <option value="angnie" {% if form.service.value == 'angnie' %}selected{% endif %}>Angnie Mali - Propreté</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="message">Message *</label>
+                <textarea id="message" name="message" required>{{ form.message.value|default:'' }}</textarea>
+            </div>
+
+            {% if form.errors %}
+            <div class="form-errors">
+                {% for field in form %}
+                    {% if field.errors %}
+                        {% for error in field.errors %}
+                            <p class="error-message">{{ error }}</p>
+                        {% endfor %}
+                    {% endif %}
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <button type="submit" class="submit-btn">Envoyer le message</button>
+        </form>
+
+        <div class="contact-info">
+            <div class="contact-info-item">
+                <strong>📍 Adresse :</strong> Mali, Afrique de l'Ouest
+            </div>
+            <div class="contact-info-item">
+                <strong>📧 Email :</strong> contact@azigroup.com
+            </div>
+            <div class="contact-info-item">
+                <strong>📞 Téléphone :</strong> +223 XX XX XX XX
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

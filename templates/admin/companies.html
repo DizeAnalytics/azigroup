@@ -1,0 +1,130 @@
+{% extends "base.html" %}
+
+{% block title %}Gestion des Entreprises - AZI GROUP{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <h1>Gestion des Entreprises</h1>
+    <p>Modifiez les informations de vos groupements</p>
+</section>
+
+<section>
+    <div class="admin-companies">
+        {% for company in companies %}
+        <div class="company-admin-card">
+            <div class="company-header">
+                <h3>{{ company.icon }} {{ company.name }}</h3>
+                <div class="company-actions">
+                    <button onclick="editCompany({{ company.id }})" class="btn btn-sm btn-primary">Modifier</button>
+                    <button onclick="toggleCompany({{ company.id }})" class="btn btn-sm {{ 'btn-secondary' if not company.active else 'btn-warning' }}">
+                        {{ 'Activer' if not company.active else 'Désactiver' }}
+                    </button>
+                </div>
+            </div>
+            <div class="company-info">
+                <p><strong>Description:</strong> {{ company.description }}</p>
+                <p><strong>Statut:</strong> 
+                    <span class="status status-{{ 'active' if company.active else 'inactive' }}">
+                        {{ 'Actif' if company.active else 'Inactif' }}
+                    </span>
+                </p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="admin-actions">
+        <button onclick="addCompany()" class="btn btn-primary">Ajouter une entreprise</button>
+    </div>
+</section>
+
+<!-- Modal pour éditer/ajouter une entreprise -->
+<div id="companyModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('companyModal')">&times;</span>
+        <div id="companyFormContent">
+            <h2>Modifier l'entreprise</h2>
+            <form id="companyForm">
+                <div class="form-group">
+                    <label for="companyName">Nom de l'entreprise</label>
+                    <input type="text" id="companyName" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="companyDescription">Description</label>
+                    <textarea id="companyDescription" name="description" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="companyIcon">Icône (emoji)</label>
+                    <input type="text" id="companyIcon" name="icon" required>
+                </div>
+                <div class="form-group">
+                    <label for="companyGradient">Dégradé CSS</label>
+                    <input type="text" id="companyGradient" name="gradient" required>
+                </div>
+                <div class="form-group">
+                    <label for="companyServices">Services (un par ligne)</label>
+                    <textarea id="companyServices" name="services" rows="5"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="companyKpis">KPI (un par ligne)</label>
+                    <textarea id="companyKpis" name="kpis" rows="5"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="companyActive" name="active" checked>
+                        Entreprise active
+                    </label>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Sauvegarder</button>
+                    <button type="button" onclick="closeModal('companyModal')" class="btn btn-secondary">Annuler</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function editCompany(companyId) {
+    // Charger les données de l'entreprise et ouvrir le modal
+    openModal('companyModal');
+    document.getElementById('companyFormContent').querySelector('h2').textContent = 'Modifier l\'entreprise';
+}
+
+function addCompany() {
+    // Réinitialiser le formulaire et ouvrir le modal
+    document.getElementById('companyForm').reset();
+    document.getElementById('companyFormContent').querySelector('h2').textContent = 'Ajouter une entreprise';
+    openModal('companyModal');
+}
+
+function toggleCompany(companyId) {
+    if (confirm('Êtes-vous sûr de vouloir changer le statut de cette entreprise ?')) {
+        // Ici vous feriez un appel AJAX pour changer le statut
+        console.log('Toggle company:', companyId);
+        location.reload(); // Pour l'instant, on recharge la page
+    }
+}
+
+// Gestion du formulaire d'entreprise
+document.getElementById('companyForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const formData = new FormData(this);
+    const data = Object.fromEntries(formData);
+    
+    // Convertir les services et KPI en JSON
+    data.services = data.services.split('\n').filter(s => s.trim());
+    data.kpis = data.kpis.split('\n').filter(s => s.trim());
+    
+    console.log('Company data:', data);
+    
+    // Ici vous feriez un appel AJAX pour sauvegarder
+    alert('Entreprise sauvegardée !');
+    closeModal('companyModal');
+    location.reload();
+});
+</script>
+{% endblock %}

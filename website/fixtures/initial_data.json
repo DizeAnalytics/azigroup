@@ -1,0 +1,112 @@
+[
+  {
+    "model": "website.company",
+    "pk": 1,
+    "fields": {
+      "name": "Global Songhoy Services (GSS)",
+      "slug": "global-songhoy-services-gss",
+      "description": "Hydro-agricole, Forages, BTP & Commerce",
+      "detailed_description": "Global Songhoy Services (GSS) est le leader des infrastructures rurales et urbaines au Mali. Notre expertise couvre l'ensemble de la chaîne de valeur du développement territorial, des études préliminaires à la maintenance des ouvrages.\n\nNous nous distinguons par notre capacité à livrer des projets complexes dans des délais serrés, avec un taux de réussite exceptionnel de 95% pour nos forages d'eau potable. Notre équipe de 150 techniciens et ingénieurs maîtrise les technologies les plus avancées tout en respectant les spécificités locales.\n\nNos références incluent plus de 500 forages réalisés, 200 km de routes rurales, et 50 bâtiments publics livrés dans les délais et budgets convenus.",
+      "icon": "🛠️",
+      "gradient": "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+      "services": [
+        "💧 Hydro-agricole & développement rural",
+        "🚰 Forages d'eau & AEP",
+        "🏗️ BTP : bâtiments, réhabilitations, VRD",
+        "📦 Commerce général : sourcing multi-catégories"
+      ],
+      "kpis": [
+        "OTD ≥ 90–95%",
+        "Écart budget ≤ 5%",
+        "Taux réussite forages ≥ 85–90%",
+        "Satisfaction ≥ 4,7/5"
+      ],
+      "active": true,
+      "created_at": "2025-01-18T15:00:00Z",
+      "updated_at": "2025-01-18T15:00:00Z"
+    }
+  },
+  {
+    "model": "website.company",
+    "pk": 2,
+    "fields": {
+      "name": "Sogis",
+      "slug": "sogis",
+      "description": "Immobilier & Facility Management",
+      "detailed_description": "Sogis est la référence immobilière au Mali avec plus de 15 ans d'expérience dans la gestion et le développement de projets immobiliers haut de gamme. Nous gérons un portefeuille de plus de 2000 unités locatives et avons livré plus de 500 logements sociaux et résidentiels.\n\nNotre expertise couvre la promotion immobilière, la gestion locative, la maintenance préventive et corrective, ainsi que l'administration de copropriétés. Nous nous appuyons sur une équipe de 80 professionnels qualifiés et des partenaires techniques reconnus.\n\nNos projets phares incluent des résidences sécurisées, des complexes commerciaux et des programmes de logements sociaux, tous certifiés aux standards internationaux de qualité et de sécurité.",
+      "icon": "🏢",
+      "gradient": "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)",
+      "services": [
+        "Recherche & due diligence",
+        "Négociation et baux conformes",
+        "Space planning & aménagement",
+        "Maintenance préventive & corrective",
+        "Facility management multiservices"
+      ],
+      "kpis": [
+        "Standards HSE",
+        "Assurance responsabilité",
+        "Accès sécurisé et confidentialité"
+      ],
+      "active": true,
+      "created_at": "2025-01-18T15:00:00Z",
+      "updated_at": "2025-01-18T15:00:00Z"
+    }
+  },
+  {
+    "model": "website.company",
+    "pk": 3,
+    "fields": {
+      "name": "Société Golden",
+      "slug": "societe-golden",
+      "description": "Transport & Logistique",
+      "detailed_description": "Société Golden est le leader du transport professionnel au Mali avec une flotte de plus de 100 véhicules modernes et sécurisés. Nous assurons le transport de personnel pour les plus grandes entreprises et organisations du pays.\n\nNotre expertise couvre tous les aspects du transport professionnel : navettes régulières, transferts ponctuels, courses express et messagerie. Notre équipe de 200 chauffeurs professionnels est formée aux meilleures pratiques de sécurité et de service client.\n\nNous nous distinguons par notre fiabilité (99.5% de ponctualité), notre sécurité (0 accident majeur en 5 ans) et notre service client 24/7. Nos partenaires incluent les principales entreprises minières, ONG internationales et institutions gouvernementales.",
+      "icon": "🚗",
+      "gradient": "linear-gradient(135deg, #ffa500 0%, #ff6347 100%)",
+      "services": [
+        "Navettes multi-sites",
+        "Transferts de personnel",
+        "Courses & messagerie",
+        "Gestion de flotte complète",
+        "Suivi GPS en temps réel",
+        "Hotline & astreintes 24/7"
+      ],
+      "kpis": [
+        "Chauffeurs formés",
+        "Assurance passagers",
+        "Procédures incident/accident"
+      ],
+      "active": true,
+      "created_at": "2025-01-18T15:00:00Z",
+      "updated_at": "2025-01-18T15:00:00Z"
+    }
+  },
+  {
+    "model": "website.company",
+    "pk": 4,
+    "fields": {
+      "name": "Angnie Mali",
+      "slug": "angnie-mali",
+      "description": "Propreté & Facility",
+      "detailed_description": "Angnie Mali est la référence en matière de services de propreté et facility management au Mali. Avec plus de 10 ans d'expérience, nous servons plus de 150 clients dans tous les secteurs : bureaux, industries, hôpitaux, écoles et centres commerciaux.\n\nNotre expertise couvre l'ensemble des services de propreté : nettoyage quotidien, nettoyage industriel spécialisé, fin de chantier, désinfection et sanitation. Nous utilisons des produits écologiques certifiés et des équipements de dernière génération.\n\nNotre équipe de 300 agents qualifiés respecte les protocoles de sécurité les plus stricts. Nous nous distinguons par notre qualité de service (98% de satisfaction client), notre ponctualité et notre capacité d'adaptation aux besoins spécifiques de chaque client.",
+      "icon": "✨",
+      "gradient": "linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)",
+      "services": [
+        "Propreté tertiaire",
+        "Nettoyage industriel",
+        "Fin de chantier",
+        "Sanitation & désinfection",
+        "Gestion des consommables",
+        "Gestion des déchets"
+      ],
+      "kpis": [
+        "Plans d'hygiène normalisés",
+        "Produits conformes (FDS)",
+        "Audits qualité réguliers"
+      ],
+      "active": true,
+      "created_at": "2025-01-18T15:00:00Z",
+      "updated_at": "2025-01-18T15:00:00Z"
+    }
+  }
+]

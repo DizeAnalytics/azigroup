@@ -1,0 +1,72 @@
+{% extends 'website/base.html' %}
+{% load static %}
+
+{% block title %}Actualités - AZI GROUP{% endblock %}
+
+{% block extra_css %}
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section avec logo en background et overlay transparent -->
+{% if navbar_logo_url %}
+<section class="hero news-hero" style="background-image: url('{{ navbar_logo_url }}'); background-size: cover; background-position: center; background-repeat: no-repeat;">
+{% elif navigation_logo and navigation_logo.logo %}
+<section class="hero news-hero" style="background-image: url('{{ navigation_logo.logo.url }}'); background-size: cover; background-position: center; background-repeat: no-repeat;">
+{% else %}
+<section class="hero news-hero" style="background-image: url('{% static 'images/AZI GROUP.PNG' %}'); background-size: cover; background-position: center; background-repeat: no-repeat;">
+{% endif %}
+    <div class="news-overlay">
+        <h1>Actualités</h1>
+        <p>Suivez nos dernières nouvelles et projets</p>
+    </div>
+</section>
+
+<section>
+    <div class="news-list">
+        {% for news_item in news %}
+        <article class="news-item">
+            <div class="news-image">
+                {% if news_item.get_image_url %}
+                <img src="{{ news_item.get_image_url }}" alt="{{ news_item.title }}">
+                {% else %}
+                <div class="news-placeholder">📰</div>
+                {% endif %}
+            </div>
+            <div class="news-content">
+                <h2><a href="{% url 'website:news_detail' news_item.slug %}">{{ news_item.title }}</a></h2>
+                <div class="news-meta">
+                    <span class="news-date">{{ news_item.created_at|date:"d/m/Y" }}</span>
+                </div>
+                <p class="news-excerpt">{{ news_item.get_excerpt }}</p>
+                <a href="{% url 'website:news_detail' news_item.slug %}" class="read-more">Lire la suite</a>
+            </div>
+        </article>
+        {% endfor %}
+        
+        {% if not news %}
+        <div class="no-news">
+            <p>Aucune actualité disponible pour le moment.</p>
+        </div>
+        {% endif %}
+    </div>
+    
+    <!-- Pagination -->
+    {% if news.has_other_pages %}
+    <div class="pagination">
+        {% if news.has_previous %}
+            <a href="?page=1" class="btn btn-secondary">Première</a>
+            <a href="?page={{ news.previous_page_number }}" class="btn btn-secondary">Précédente</a>
+        {% endif %}
+        
+        <span class="current-page">
+            Page {{ news.number }} sur {{ news.paginator.num_pages }}
+        </span>
+        
+        {% if news.has_next %}
+            <a href="?page={{ news.next_page_number }}" class="btn btn-secondary">Suivante</a>
+            <a href="?page={{ news.paginator.num_pages }}" class="btn btn-secondary">Dernière</a>
+        {% endif %}
+    </div>
+    {% endif %}
+</section>
+{% endblock %}

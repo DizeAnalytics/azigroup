@@ -1,0 +1,35 @@
+{% extends 'website/base.html' %}
+
+{% block title %}Témoignages - AZI GROUP{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <h1>Témoignages Clients</h1>
+    <p>Ce que nos clients disent de nous</p>
+</section>
+
+<section>
+    <div class="testimonials-grid">
+        {% for testimonial in testimonials %}
+        <div class="testimonial-card">
+            <div class="testimonial-content">
+                <p>"{{ testimonial.content }}"</p>
+                <div class="testimonial-rating">{{ testimonial.get_stars }}</div>
+            </div>
+            <div class="testimonial-author">
+                <div class="author-info">
+                    <h4>{{ testimonial.name }}</h4>
+                    <p>{{ testimonial.position }}, {{ testimonial.company }}</p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    
+    {% if not testimonials %}
+    <div class="no-testimonials">
+        <p>Aucun témoignage disponible pour le moment.</p>
+    </div>
+    {% endif %}
+</section>
+{% endblock %}

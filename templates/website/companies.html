@@ -1,0 +1,64 @@
+{% extends 'website/base.html' %}
+{% load static %}
+
+{% block title %}Nos Groupements - AZI GROUP{% endblock %}
+
+{% block content %}
+<!-- Hero Section avec image dynamique -->
+{% if hero_section %}
+<section class="hero companies-hero" style="background-image: url('{{ hero_section.background_image.url }}'); background-size: cover; background-position: center; background-repeat: no-repeat;">
+    <div class="companies-overlay">
+        <h1>Nos Groupements</h1>
+        <p>Découvrez nos entreprises spécialisées</p>
+    </div>
+</section>
+{% else %}
+<!-- Fallback si aucune section hero n'est configurée -->
+<section class="hero companies-hero" style="background-image: url('{% static 'images/AZI GROUP.PNG' %}'); background-size: cover; background-position: center; background-repeat: no-repeat;">
+    <div class="companies-overlay">
+        <h1>Nos Groupements</h1>
+        <p>Découvrez nos entreprises spécialisées</p>
+    </div>
+</section>
+{% endif %}
+
+<section>
+    <div class="companies-grid">
+        {% for company in companies %}
+        <div class="company-card">
+            <div class="company-image" style="background: {{ company.gradient }};">
+                {% if company.logo %}
+                <div class="company-logo">
+                    <img src="{{ company.logo.url }}" alt="{{ company.name }}" class="logo-img">
+                </div>
+                {% else %}
+                <div class="company-icon-large">{{ company.icon }}</div>
+                {% endif %}
+            </div>
+            <div class="company-content">
+                <h3>{{ company.icon }} {{ company.name }}</h3>
+                <p><strong>{{ company.description }}</strong></p>
+                
+                <h4>Domaines clés</h4>
+                <ul>
+                    {% for service in company.get_services_list %}
+                    <li>{{ service }}</li>
+                    {% endfor %}
+                </ul>
+                
+                <h4>KPI Cibles</h4>
+                <ul>
+                    {% for kpi in company.get_kpis_list %}
+                    <li>{{ kpi }}</li>
+                    {% endfor %}
+                </ul>
+                
+                <div class="company-actions">
+                    <a href="{% url 'website:company_detail' company.slug %}" class="btn btn-primary">En savoir plus</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block title %}Gestion des Contacts - AZI GROUP{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <h1>Messages de Contact</h1>
+    <p>Gérez les messages reçus</p>
+</section>
+
+<section>
+    <div class="admin-table">
+        <table>
+            <thead>
+                <tr>
+                    <th>Nom</th>
+                    <th>Email</th>
+                    <th>Téléphone</th>
+                    <th>Entreprise</th>
+                    <th>Service</th>
+                    <th>Date</th>
+                    <th>Statut</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for contact in contacts %}
+                <tr>
+                    <td>{{ contact.name }}</td>
+                    <td>{{ contact.email }}</td>
+                    <td>{{ contact.phone or '-' }}</td>
+                    <td>{{ contact.company or '-' }}</td>
+                    <td>{{ contact.service or '-' }}</td>
+                    <td>{{ contact.created_at.strftime('%d/%m/%Y %H:%M') }}</td>
+                    <td>
+                        <span class="status status-{{ contact.status }}">{{ contact.status }}</span>
+                    </td>
+                    <td>
+                        <button onclick="viewMessage({{ contact.id }})" class="btn btn-sm">Voir</button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    {% if not contacts %}
+    <div class="no-data">
+        <p>Aucun message de contact pour le moment.</p>
+    </div>
+    {% endif %}
+</section>
+
+<!-- Modal pour afficher le message -->
+<div id="messageModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('messageModal')">&times;</span>
+        <div id="messageContent"></div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function viewMessage(contactId) {
+    // Simuler l'affichage du message (en réalité, vous feriez un appel AJAX)
+    const messageContent = document.getElementById('messageContent');
+    messageContent.innerHTML = `
+        <h2>Détails du Message</h2>
+        <p><strong>ID:</strong> ${contactId}</p>
+        <p><strong>Message:</strong> [Contenu du message sera chargé ici]</p>
+    `;
+    openModal('messageModal');
+}
+</script>
+{% endblock %}

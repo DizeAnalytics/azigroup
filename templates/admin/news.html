@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+
+{% block title %}Gestion des Actualités - AZI GROUP{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <h1>Gestion des Actualités</h1>
+    <p>Créez et gérez vos articles d'actualité</p>
+</section>
+
+<section>
+    <div class="admin-actions">
+        <button onclick="addNews()" class="btn btn-primary">Ajouter un article</button>
+    </div>
+
+    <div class="news-admin-list">
+        {% for news_item in news %}
+        <div class="news-admin-card">
+            <div class="news-header">
+                <h3>{{ news_item.title }}</h3>
+                <div class="news-actions">
+                    <button onclick="editNews({{ news_item.id }})" class="btn btn-sm btn-primary">Modifier</button>
+                    <button onclick="toggleNews({{ news_item.id }})" class="btn btn-sm {{ 'btn-secondary' if not news_item.published else 'btn-warning' }}">
+                        {{ 'Publier' if not news_item.published else 'Dépublier' }}
+                    </button>
+                    <button onclick="deleteNews({{ news_item.id }})" class="btn btn-sm btn-danger">Supprimer</button>
+                </div>
+            </div>
+            <div class="news-info">
+                <p><strong>Date de création:</strong> {{ news_item.created_at.strftime('%d/%m/%Y %H:%M') }}</p>
+                <p><strong>Statut:</strong> 
+                    <span class="status status-{{ 'published' if news_item.published else 'draft' }}">
+                        {{ 'Publié' if news_item.published else 'Brouillon' }}
+                    </span>
+                </p>
+                <p><strong>Aperçu:</strong> {{ news_item.content[:100] }}...</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    {% if not news %}
+    <div class="no-data">
+        <p>Aucun article d'actualité pour le moment.</p>
+    </div>
+    {% endif %}
+</section>
+
+<!-- Modal pour éditer/ajouter un article -->
+<div id="newsModal" class="modal">
+    <div class="modal-content large">
+        <span class="close" onclick="closeModal('newsModal')">&times;</span>
+        <div id="newsFormContent">
+            <h2>Ajouter un article</h2>
+            <form id="newsForm">
+                <div class="form-group">
+                    <label for="newsTitle">Titre de l'article</label>
+                    <input type="text" id="newsTitle" name="title" required>
+                </div>
+                <div class="form-group">
+                    <label for="newsImage">URL de l'image (optionnel)</label>
+                    <input type="url" id="newsImage" name="image_url">
+                </div>
+                <div class="form-group">
+                    <label for="newsContent">Contenu de l'article</label>
+                    <textarea id="newsContent" name="content" rows="10" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="newsPublished" name="published" checked>
+                        Publier immédiatement
+                    </label>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Sauvegarder</button>
+                    <button type="button" onclick="closeModal('newsModal')" class="btn btn-secondary">Annuler</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function addNews() {
+    document.getElementById('newsForm').reset();
+    document.getElementById('newsFormContent').querySelector('h2').textContent = 'Ajouter un article';
+    openModal('newsModal');
+}
+
+function editNews(newsId) {
+    // Charger les données de l'article et ouvrir le modal
+    document.getElementById('newsFormContent').querySelector('h2').textContent = 'Modifier l\'article';
+    openModal('newsModal');
+}
+
+function toggleNews(newsId) {
+    if (confirm('Êtes-vous sûr de vouloir changer le statut de publication de cet article ?')) {
+        // Ici vous feriez un appel AJAX pour changer le statut
+        console.log('Toggle news:', newsId);
+        location.reload();
+    }
+}
+
+function deleteNews(newsId) {
+    if (confirm('Êtes-vous sûr de vouloir supprimer cet article ? Cette action est irréversible.')) {
+        // Ici vous feriez un appel AJAX pour supprimer
+        console.log('Delete news:', newsId);
+        location.reload();
+    }
+}
+
+// Gestion du formulaire d'actualité
+document.getElementById('newsForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const formData = new FormData(this);
+    const data = Object.fromEntries(formData);
+    
+    console.log('News data:', data);
+    
+    // Ici vous feriez un appel AJAX pour sauvegarder
+    alert('Article sauvegardé !');
+    closeModal('newsModal');
+    location.reload();
+});
+</script>
+{% endblock %}
