@@ -1,134 +1,109 @@
-# AZI GROUP - Site Web Dynamique
+# AZI GROUP - Site Web (Django)
 
-Site web moderne et dynamique pour AZI GROUP, développé avec Flask (Python).
+Site web moderne et dynamique pour AZI GROUP, développé avec Django.
 
 ## 🚀 Fonctionnalités
 
 - **Site responsive** avec design moderne
-- **Gestion dynamique du contenu** via interface d'administration
-- **Système de contact** avec base de données
-- **Actualités et blog** intégrés
+- **Gestion de contenu** via l’interface d’administration Django
+- **Formulaire de contact** avec stockage en base
+- **Actualités / blog**
 - **Gestion des entreprises** du groupement
-- **Interface d'administration** complète
 
 ## 📋 Prérequis
 
-- Python 3.8 ou supérieur
-- pip (gestionnaire de paquets Python)
+- Python 3.10+ (recommandé)
+- pip
+- virtualenv (recommandé)
 
-## 🛠️ Installation
+## 🛠️ Installation (développement)
 
-1. **Cloner ou télécharger le projet**
-   ```bash
-   cd AZI_GROUP
-   ```
+```bash
+cd AZI_GROUP
+python -m venv .venv
+.venv\Scripts\activate        # Windows PowerShell
+pip install -r requirements.txt
 
-2. **Installer les dépendances**
-   ```bash
-   pip install -r requirements.txt
-   ```
+# Créer le fichier .env (facultatif mais recommandé)
+# Voir l’exemple plus bas
 
-3. **Lancer l'application**
-   ```bash
-   python app.py
-   ```
+# Appliquer les migrations
+python manage.py migrate
 
-4. **Accéder au site**
-   - Site principal : http://localhost:5000
-   - Interface d'administration : http://localhost:5000/admin
+# (Optionnel) Créer un superuser pour /admin
+python manage.py createsuperuser
 
-## 📁 Structure du Projet
+# Lancer le serveur de dev
+python manage.py runserver
+```
+
+- Site: `http://localhost:8000`
+- Admin: `http://localhost:8000/admin`
+
+## ⚙️ Configuration
+
+Créer un fichier `.env` à la racine (même dossier que `manage.py`) avec par exemple:
+
+```
+DJANGO_SECRET_KEY=change-me
+DJANGO_DEBUG=True
+DJANGO_ALLOWED_HOSTS=localhost,127.0.0.1
+# DATABASE_URL=postgres://user:pass@host:5432/dbname  # si vous utilisez Postgres
+```
+
+Assurez-vous que ces variables sont lues dans `settings.py` (le projet peut déjà gérer cela, sinon utilisez `python-dotenv` ou `dj-database-url`).
+
+## 📁 Structure (extrait)
 
 ```
 AZI_GROUP/
-├── app.py                 # Application Flask principale
-├── requirements.txt       # Dépendances Python
-├── azigroup.db           # Base de données SQLite (créée automatiquement)
-├── templates/            # Templates Jinja2
-│   ├── base.html         # Template de base
-│   ├── index.html        # Page d'accueil
-│   ├── about.html        # Page À propos
-│   ├── companies.html    # Page des entreprises
-│   ├── contact.html      # Page de contact
-│   ├── news.html         # Page des actualités
-│   ├── news_detail.html  # Détail d'un article
-│   └── admin/            # Templates d'administration
-│       ├── dashboard.html
-│       ├── contacts.html
-│       ├── companies.html
-│       └── news.html
-├── static/               # Fichiers statiques
-│   ├── css/
-│   │   └── style.css     # Styles CSS
-│   ├── js/
-│   │   └── main.js       # JavaScript principal
-│   └── images/           # Images du site
-└── index.html            # Ancien fichier statique (référence)
+├── azigroup_project/
+│   ├── settings.py
+│   ├── urls.py
+│   └── wsgi.py
+├── website/
+│   ├── models.py
+│   ├── views.py
+│   ├── urls.py
+│   └── templates/website/
+├── templates/
+├── static/                      # sources statiques (dev)
+├── staticfiles/                 # collectstatic (prod) – ignoré par Git
+├── media/                       # uploads – ignoré par Git
+├── manage.py
+└── requirements.txt
 ```
 
-## 🎯 Fonctionnalités Principales
+## 🗄️ Base de données
 
-### Site Public
-- **Page d'accueil** : Présentation d'AZI GROUP avec actualités récentes
-- **À propos** : Mission, valeurs et vision de l'entreprise
-- **Nos Groupements** : Présentation des 4 entreprises du groupe
-- **Actualités** : Blog et nouvelles du groupe
-- **Contact** : Formulaire de contact fonctionnel
+- Dev par défaut: SQLite (fichier `db.sqlite3`, ignoré par Git)
+- Prod: utilisez Postgres/MySQL, configurez `DATABASE_URL` et les cred.
 
-### Interface d'Administration
-- **Tableau de bord** : Vue d'ensemble des statistiques
-- **Gestion des contacts** : Consultation des messages reçus
-- **Gestion des entreprises** : Modification des informations des groupements
-- **Gestion des actualités** : Création et modification des articles
+Appliquer les migrations:
 
-## 🗄️ Base de Données
-
-Le site utilise SQLite avec les modèles suivants :
-
-- **Contact** : Messages du formulaire de contact
-- **Company** : Informations des entreprises du groupe
-- **News** : Articles d'actualité
-
-## 🎨 Personnalisation
-
-### Modifier le Design
-- Éditez `static/css/style.css` pour personnaliser l'apparence
-- Les couleurs principales sont définies dans les variables CSS
-
-### Ajouter du Contenu
-- Utilisez l'interface d'administration pour gérer le contenu
-- Ou modifiez directement les templates dans `templates/`
-
-### Ajouter des Fonctionnalités
-- Étendez `app.py` avec de nouvelles routes
-- Créez de nouveaux modèles de données si nécessaire
-
-## 🔧 Configuration
-
-### Variables d'Environnement
-Vous pouvez personnaliser l'application en modifiant les variables dans `app.py` :
-
-```python
-app.config['SECRET_KEY'] = 'votre-cle-secrete-ici'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///azigroup.db'
-```
-
-### Base de Données
-La base de données SQLite est créée automatiquement au premier lancement avec des données d'exemple.
-
-## 🚀 Déploiement
-
-### Déploiement Local
 ```bash
-python app.py
+python manage.py migrate
 ```
 
-### Déploiement en Production
-Pour un déploiement en production, considérez :
-- Utiliser un serveur WSGI comme Gunicorn
-- Configurer un serveur web comme Nginx
-- Utiliser une base de données PostgreSQL ou MySQL
-- Configurer HTTPS et la sécurité
+## 🎨 Fichiers statiques et médias
+
+- En dev, servez via `runserver`.
+- En prod, exécutez:
+
+```bash
+python manage.py collectstatic --noinput
+```
+
+Puis servez `staticfiles/` via votre serveur (Nginx, CDN, etc.). Les uploads utilisateurs vont dans `media/`.
+
+> Remarque: `.gitignore` exclut `db.sqlite3`, `media/` et `staticfiles/` pour garder le dépôt léger.
+
+## 🚀 Déploiement (aperçu)
+
+- Définir `DJANGO_DEBUG=False` et `DJANGO_ALLOWED_HOSTS`
+- Configurer une base managée (ex: Postgres) et les variables d’env
+- Lancer les migrations et `collectstatic`
+- Servir via WSGI/ASGI (ex: Gunicorn + Nginx)
 
 ## 📞 Support
 
