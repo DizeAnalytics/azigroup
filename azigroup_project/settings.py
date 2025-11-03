@@ -22,12 +22,19 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = config('SECRET_KEY', default='django-insecure-o)t39_l0(te#5^y31wm+ejl36f9^w3^b@o$4r&*ym*k+rbszsx')
+# Supporte DJANGO_SECRET_KEY (prioritaire) puis SECRET_KEY pour compatibilité
+SECRET_KEY = config('DJANGO_SECRET_KEY', default=config('SECRET_KEY', default='django-insecure-o)t39_l0(te#5^y31wm+ejl36f9^w3^b@o$4r&*ym*k+rbszsx'))
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = config('DEBUG', default=True, cast=bool)
+# Supporte DJANGO_DEBUG (prioritaire) puis DEBUG
+DEBUG = config('DJANGO_DEBUG', default=config('DEBUG', default=True), cast=bool)
 
-ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost,127.0.0.1', cast=lambda v: [s.strip() for s in v.split(',')])
+# Supporte DJANGO_ALLOWED_HOSTS (prioritaire) puis ALLOWED_HOSTS
+ALLOWED_HOSTS = config(
+    'DJANGO_ALLOWED_HOSTS',
+    default=config('ALLOWED_HOSTS', default='localhost,127.0.0.1'),
+    cast=lambda v: [s.strip() for s in v.split(',') if s.strip()],
+)
 
 
 # Application definition
