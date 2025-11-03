@@ -1,7 +1,8 @@
-Django>=4.2.0
-django-admin-interface
-Pillow
-python-decouple
-django-crispy-forms
-crispy-bootstrap5
-django-extensions
+Django~=4.2.0
+django-admin-interface~=0.28.0
+Pillow~=10.0
+python-decouple~=3.8
+django-crispy-forms~=2.1
+crispy-bootstrap5~=2024.2
+django-extensions~=3.2
+gunicorn~=21.2
