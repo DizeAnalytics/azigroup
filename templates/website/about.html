@@ -1,56 +1,258 @@
 {% extends 'website/base.html' %}
 {% load static %}
 
-{% block title %}À Propos - AZI GROUP{% endblock %}
+{% block title %}À propos - IBC Sarl BTP{% endblock %}
 
 {% block extra_css %}
+<style>
+    /* Layout */
+    .about-page {
+        background: #f6f8fb;
+        padding: 96px 16px 64px; /* header fixed */
+    }
+    .about-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: grid;
+        gap: 18px;
+    }
+
+    /* Hero */
+    .about-hero-block {
+        border-radius: 18px;
+        overflow: hidden;
+        position: relative;
+        background: linear-gradient(135deg, #E45B40 0%, #CC4D3D 60%, #B83D2A 100%);
+        color: #fff;
+        box-shadow: 0 14px 38px rgba(228, 91, 64, 0.25);
+        padding: 28px;
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 14px;
+    }
+    @media (min-width: 900px) {
+        .about-hero-block {
+            padding: 32px 36px;
+            grid-template-columns: 1.15fr 0.85fr;
+            align-items: center;
+        }
+    }
+    .about-hero-bg {
+        position: absolute;
+        inset: 0;
+        background-size: cover;
+        background-position: center;
+        opacity: 0.2;
+    }
+    .about-hero-content {
+        position: relative;
+        z-index: 1;
+    }
+    .about-kicker {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 12px;
+        border-radius: 999px;
+        background: rgba(255,255,255,0.14);
+        border: 1px solid rgba(255,255,255,0.28);
+        font-weight: 700;
+        letter-spacing: 0.02em;
+    }
+    .about-title {
+        margin: 12px 0 8px;
+        font-size: 2rem;
+        font-weight: 800;
+        letter-spacing: -0.02em;
+        color: #fff !important;
+    }
+    @media (min-width: 768px) {
+        .about-title { font-size: 2.35rem; }
+    }
+    .about-subtitle {
+        margin: 0;
+        opacity: 0.92;
+        line-height: 1.6;
+        color: #fff !important;
+    }
+    .about-hero-stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+        gap: 12px;
+        position: relative;
+        z-index: 1;
+    }
+    .about-stat {
+        background: rgba(255,255,255,0.12);
+        border: 1px solid rgba(255,255,255,0.25);
+        border-radius: 14px;
+        padding: 12px 14px;
+        backdrop-filter: blur(8px);
+    }
+    .about-stat h4 {
+        margin: 0;
+        font-size: 1.6rem;
+        font-weight: 800;
+    }
+    .about-stat p {
+        margin: 4px 0 0;
+        font-size: 0.95rem;
+        opacity: 0.9;
+    }
+
+    /* Cards */
+    .about-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 18px;
+    }
+    @media (min-width: 900px) {
+        .about-grid.two {
+            grid-template-columns: 1.1fr 0.9fr;
+        }
+    }
+    .about-card {
+        background: #fff;
+        border-radius: 18px;
+        border: 1.5px solid #E45B40;
+        box-shadow: 0 14px 32px rgba(228, 91, 64, 0.08);
+        padding: 20px;
+    }
+    @media (min-width: 768px) {
+        .about-card { padding: 24px; }
+    }
+    .about-card h3 {
+        margin: 0 0 10px;
+        color: #E45B40;
+        font-size: 1.35rem;
+        font-weight: 800;
+        letter-spacing: -0.01em;
+    }
+    .about-card p {
+        margin: 0;
+        color: #4a5568;
+        line-height: 1.75;
+    }
+
+    /* Values */
+    .values-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 14px;
+    }
+    .value-card {
+        background: #f8fbff;
+        border: 1.5px solid #E45B40;
+        border-radius: 16px;
+        padding: 16px;
+        box-shadow: inset 0 0 0 1px rgba(228, 91, 64, 0.06);
+    }
+    .value-card h4 {
+        margin: 0 0 8px;
+        color: #E45B40;
+        font-size: 1.05rem;
+        font-weight: 800;
+    }
+    .value-card p {
+        margin: 0;
+        color: #4a5568;
+        line-height: 1.7;
+    }
+
+    /* Sections titles */
+    .section-heading {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 12px;
+        font-weight: 900;
+        color: #E45B40;
+        letter-spacing: -0.01em;
+    }
+    .section-heading span {
+        display: inline-flex;
+        width: 12px;
+        height: 12px;
+        border-radius: 999px;
+        background: #E45B40;
+        box-shadow: 0 0 0 6px rgba(228, 91, 64, 0.12);
+    }
+</style>
 {% endblock %}
 
 {% block content %}
-<!-- Hero Section avec logo en background et overlay transparent -->
-{% if navbar_logo_url %}
-<section class="hero about-hero" style="background-image: url('{{ navbar_logo_url }}'); background-size: cover; background-position: center; background-repeat: no-repeat;">
-{% elif navigation_logo and navigation_logo.logo %}
-<section class="hero about-hero" style="background-image: url('{{ navigation_logo.logo.url }}'); background-size: cover; background-position: center; background-repeat: no-repeat;">
-{% else %}
-<section class="hero about-hero" style="background-image: url('{% static 'images/AZI GROUP.PNG' %}'); background-size: cover; background-position: center; background-repeat: no-repeat;">
-{% endif %}
-    <div class="about-overlay">
-        <h1>À Propos d'AZI GROUP</h1>
-        <p>Notre mission, nos valeurs et notre vision</p>
-    </div>
-</section>
+<section class="about-page">
+    <div class="about-container">
+        <!-- Hero -->
+        <div class="about-hero-block">
+            {% if navbar_logo_url %}
+                <div class="about-hero-bg" style="background-image: url('{{ navbar_logo_url }}');"></div>
+            {% elif navigation_logo and navigation_logo.logo %}
+                <div class="about-hero-bg" style="background-image: url('{{ navigation_logo.logo.url }}');"></div>
+            {% endif %}
 
-<section>
-    <div class="about-content">
-        <h2>Notre Mission</h2>
-        <p>AZI Group s'engage à fournir des solutions opérationnelles complètes et fiables aux organisations internationales et aux ONGs opérant en Afrique de l'Ouest. Nous transformons les défis complexes en résultats mesurables grâce à notre expertise locale et notre approche structurée.</p>
-        
-        <h2>Nos Valeurs</h2>
-        <div class="values-grid">
-            <div class="value-card">
-                <h3>🎯 Excellence Opérationnelle</h3>
-                <p>Nous nous engageons à livrer des résultats de qualité supérieure dans les délais convenus.</p>
+            <div class="about-hero-content">
+                <div class="about-kicker">À propos d'IBC Sarl BTP</div>
+                <h1 class="about-title">Construire durablement au Togo et en Afrique de l'Ouest</h1>
+                <p class="about-subtitle">Nous réalisons des projets BTP (construction, réhabilitation et maintenance) et nous accompagnons les maîtres d’ouvrage publics et privés, de l’étude au suivi de chantier.</p>
             </div>
-            <div class="value-card">
-                <h3>🤝 Transparence</h3>
-                <p>Communication claire, reporting détaillé et traçabilité complète de nos activités.</p>
-            </div>
-            <div class="value-card">
-                <h3>🌍 Impact Local</h3>
-                <p>Formation et développement des équipes locales pour un impact durable.</p>
-            </div>
-            <div class="value-card">
-                <h3>⚡ Innovation</h3>
-                <p>Amélioration continue de nos processus et adoption des meilleures pratiques.</p>
+
+            <div class="about-hero-stats">
+                <div class="about-stat">
+                    <h4>Qualité</h4>
+                    <p>Livraison conforme aux normes et aux attentes</p>
+                </div>
+                <div class="about-stat">
+                    <h4>Délais</h4>
+                    <p>Planning maîtrisé, reporting transparent</p>
+                </div>
+                <div class="about-stat">
+                    <h4>Sécurité</h4>
+                    <p>Culture chantier, procédures et prévention</p>
+                </div>
             </div>
         </div>
-        
-        <h2>Notre Vision</h2>
-        <p>Devenir le partenaire de référence pour l'excellence opérationnelle en Afrique de l'Ouest, en permettant aux organisations internationales de se concentrer sur leur cœur de métier tout en bénéficiant d'une exécution locale de qualité.</p>
-        
-        <h2>Notre Équipe</h2>
-        <p>Notre équipe combine une expertise technique approfondie avec une connaissance intime du contexte local. Nous comprenons les défis spécifiques de l'Afrique de l'Ouest et adaptons nos solutions en conséquence.</p>
+
+        <!-- Mission + Vision -->
+        <div class="about-grid two">
+            <div class="about-card">
+                <div class="section-heading"><span></span>Notre mission</div>
+                <p>Réaliser des ouvrages durables et fiables au Togo en maîtrisant coûts, délais et sécurité, avec une exigence élevée sur la qualité d'exécution et la coordination de chantier.</p>
+            </div>
+            <div class="about-card">
+                <div class="section-heading"><span></span>Notre vision</div>
+                <p>Devenir un acteur de référence du BTP en Afrique de l'Ouest, capable d'accompagner durablement les projets publics et privés grâce à une expertise technique solide et une organisation agile.</p>
+            </div>
+        </div>
+
+        <!-- Valeurs -->
+        <div class="about-card">
+            <div class="section-heading"><span></span>Nos valeurs</div>
+            <div class="values-grid">
+                <div class="value-card">
+                    <h4>🎯 Excellence opérationnelle</h4>
+                    <p>Résultats conformes aux exigences, respect des jalons, pilotage serré.</p>
+                </div>
+                <div class="value-card">
+                    <h4>🤝 Transparence</h4>
+                    <p>Communication claire, indicateurs partagés, traçabilité des décisions et des coûts.</p>
+                </div>
+                <div class="value-card">
+                    <h4>🌍 Impact local</h4>
+                    <p>Montée en compétence des équipes locales et retombées durables pour les territoires.</p>
+                </div>
+                <div class="value-card">
+                    <h4>⚡ Innovation</h4>
+                    <p>Amélioration continue, adoption des meilleures pratiques chantier et outils modernes.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Équipe -->
+        <div class="about-card">
+            <div class="section-heading"><span></span>Notre équipe</div>
+            <p>Une équipe mêlant ingénierie, conduite de travaux et support opérationnel, avec une connaissance fine du contexte ouest-africain. Nous adaptons nos méthodes aux réalités locales pour sécuriser vos projets et garantir un accompagnement de bout en bout.</p>
+        </div>
     </div>
 </section>
 {% endblock %}

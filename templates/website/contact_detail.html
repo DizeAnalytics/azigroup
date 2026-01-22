@@ -1,0 +1,250 @@
+{% extends 'website/base.html' %}
+{% load static %}
+
+{% block title %}Détail du Message - IBC Sarl BTP{% endblock %}
+
+{% block extra_css %}
+<style>
+    .contact-detail-section {
+        padding: 80px 2rem;
+        background: #f5f7fa;
+        min-height: calc(100vh - 60px);
+    }
+    .contact-detail-container {
+        max-width: 900px;
+        margin: 0 auto;
+    }
+    .contact-detail-header {
+        background: linear-gradient(135deg, #E45B40 0%, #CC4D3D 100%);
+        color: white;
+        padding: 2rem;
+        border-radius: 20px 20px 0 0;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    }
+    .contact-detail-header h1 {
+        margin: 0;
+        font-size: 2rem;
+        font-weight: 700;
+    }
+    .contact-detail-header .back-link {
+        color: white;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+        opacity: 0.9;
+        transition: opacity 0.2s;
+    }
+    .contact-detail-header .back-link:hover {
+        opacity: 1;
+        text-decoration: none;
+        color: white;
+    }
+    .contact-detail-card {
+        background: white;
+        padding: 2.5rem;
+        border-radius: 0 0 20px 20px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    }
+    .contact-info-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+    }
+    .contact-info-item {
+        padding: 1.5rem;
+        background: #f8f9fa;
+        border-radius: 12px;
+        border-left: 4px solid #E45B40;
+    }
+    .contact-info-item label {
+        display: block;
+        font-weight: 600;
+        color: #E45B40;
+        margin-bottom: 0.5rem;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    .contact-info-item .value {
+        color: #333;
+        font-size: 1.1rem;
+    }
+    .contact-message {
+        background: #f8f9fa;
+        padding: 2rem;
+        border-radius: 12px;
+        border-left: 4px solid #E45B40;
+        margin-top: 2rem;
+    }
+    .contact-message label {
+        display: block;
+        font-weight: 600;
+        color: #E45B40;
+        margin-bottom: 1rem;
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    .contact-message .message-content {
+        color: #333;
+        line-height: 1.8;
+        font-size: 1.05rem;
+        white-space: pre-wrap;
+    }
+    .status-badge {
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        display: inline-block;
+    }
+    .status-nouveau {
+        background: #e3f2fd;
+        color: #1976d2;
+    }
+    .status-lu {
+        background: #e8f5e8;
+        color: #2e7d32;
+    }
+    .status-repondu {
+        background: #fff3e0;
+        color: #f57c00;
+    }
+    .status-traite {
+        background: #f3e5f5;
+        color: #7b1fa2;
+    }
+    .contact-actions {
+        margin-top: 2rem;
+        padding-top: 2rem;
+        border-top: 2px solid #e0e0e0;
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+    }
+    .btn-action {
+        padding: 0.75rem 1.5rem;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: transform 0.2s, box-shadow 0.2s;
+        display: inline-block;
+    }
+    .btn-back {
+        background: #6c757d;
+        color: white;
+    }
+    .btn-back:hover {
+        background: #5a6268;
+        color: white;
+        text-decoration: none;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(108, 117, 125, 0.3);
+    }
+    .btn-admin {
+        background: linear-gradient(135deg, #E45B40 0%, #CC4D3D 100%);
+        color: white;
+    }
+    .btn-admin:hover {
+        color: white;
+        text-decoration: none;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(228, 91, 64, 0.3);
+    }
+    @media (max-width: 768px) {
+        .contact-detail-section {
+            padding: 60px 1rem;
+        }
+        .contact-detail-card {
+            padding: 1.5rem;
+        }
+        .contact-info-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="contact-detail-section">
+    <div class="contact-detail-container">
+        <div class="contact-detail-header">
+            <a href="{% url 'website:dashboard' %}" class="back-link">
+                ← Retour au tableau de bord
+            </a>
+            <h1>Détail du Message de Contact</h1>
+        </div>
+        
+        <div class="contact-detail-card">
+            <div class="contact-info-grid">
+                <div class="contact-info-item">
+                    <label>Nom complet</label>
+                    <div class="value">{{ contact.name }}</div>
+                </div>
+                
+                <div class="contact-info-item">
+                    <label>Email</label>
+                    <div class="value">
+                        <a href="mailto:{{ contact.email }}">{{ contact.email }}</a>
+                    </div>
+                </div>
+                
+                {% if contact.phone %}
+                <div class="contact-info-item">
+                    <label>Téléphone</label>
+                    <div class="value">
+                        <a href="tel:{{ contact.phone }}">{{ contact.phone }}</a>
+                    </div>
+                </div>
+                {% endif %}
+                
+                {% if contact.company %}
+                <div class="contact-info-item">
+                    <label>Entreprise/Organisation</label>
+                    <div class="value">{{ contact.company }}</div>
+                </div>
+                {% endif %}
+                
+                {% if contact.service %}
+                <div class="contact-info-item">
+                    <label>Service concerné</label>
+                    <div class="value">{{ contact.get_service_display }}</div>
+                </div>
+                {% endif %}
+                
+                <div class="contact-info-item">
+                    <label>Date de réception</label>
+                    <div class="value">{{ contact.created_at|date:"d/m/Y à H:i" }}</div>
+                </div>
+                
+                <div class="contact-info-item">
+                    <label>Statut</label>
+                    <div class="value">
+                        <span class="status-badge status-{{ contact.status }}">
+                            {{ contact.get_status_display }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="contact-message">
+                <label>Message</label>
+                <div class="message-content">{{ contact.message }}</div>
+            </div>
+            
+            <div class="contact-actions">
+                <a href="{% url 'website:dashboard' %}" class="btn-action btn-back">
+                    ← Retour au tableau de bord
+                </a>
+                <a href="/securelogin/website/contact/{{ contact.id }}/change/" class="btn-action btn-admin" target="_blank">
+                    Modifier dans l'admin
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

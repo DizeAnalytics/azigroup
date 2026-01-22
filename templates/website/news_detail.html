@@ -1,11 +1,19 @@
 {% extends 'website/base.html' %}
+{% load static %}
 
-{% block title %}{{ news.title }} - AZI GROUP{% endblock %}
+{% block title %}{{ news.title }} - IBC Sarl BTP{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/news.css' %}?v=6">
+<link rel="stylesheet" href="{% static 'css/lightbox.css' %}?v=1">
+{% endblock %}
 
 {% block content %}
-<section class="news-detail-header">
-    <h1 class="news-activity-title">NOUVELLE ACTIVITE</h1>
-    <p class="news-date">{{ news.created_at|date:"d/m/Y" }}</p>
+<section class="news-detail-header" {% if navbar_logo_url %}style="background-image: url('{{ navbar_logo_url }}'); background-size: cover; background-position: center; background-repeat: no-repeat;"{% elif navigation_logo and navigation_logo.logo %}style="background-image: url('{{ navigation_logo.logo.url }}'); background-size: cover; background-position: center; background-repeat: no-repeat;"{% endif %}>
+    <div class="news-detail-overlay">
+        <h1 class="news-activity-title">{{ news.title }}</h1>
+        <p class="news-date">📅 {{ news.created_at|date:"d F Y" }}</p>
+    </div>
 </section>
 
 <section>
@@ -19,10 +27,33 @@
         <div class="news-content">
             {{ news.content|linebreaks }}
         </div>
+
+        <!-- Galerie d'images cliquables -->
+        {% if news.images.all %}
+        <div class="news-gallery">
+            <h3 class="pd-section-title" style="margin-bottom: 1.5rem; text-align: center; font-size: 1.5rem;">
+                📸 Galerie Photos
+            </h3>
+            {% for image in news.images.all %}
+            <div class="news-gallery-item" data-caption="{{ image.caption|default:'' }}">
+                <a href="{{ image.image.url }}" data-caption="{{ image.caption|default:'' }}">
+                    <img src="{{ image.image.url }}" alt="{{ image.caption|default:news.title }}" loading="lazy">
+                    {% if image.caption %}
+                    <div class="news-gallery-caption">{{ image.caption }}</div>
+                    {% endif %}
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
         
         <div class="news-navigation">
-            <a href="{% url 'website:news_list' %}" class="btn btn-secondary">← Retour aux actualités</a>
+            <a href="{% url 'website:news_list' %}">← Retour aux actualités</a>
         </div>
     </article>
 </section>
+
+{% block extra_js %}
+<script src="{% static 'js/lightbox.js' %}?v=1"></script>
+{% endblock %}
 {% endblock %}

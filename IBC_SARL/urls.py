@@ -1,5 +1,5 @@
 """
-URL configuration for azigroup_project project.
+URL configuration for IBC_SARL project.
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/4.2/topics/http/urls/
@@ -18,9 +18,14 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from django.http import Http404
+
+def fake_admin(request):
+    raise Http404()
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('securelogin/', admin.site.urls),
+    path('admin/', fake_admin),
     path('', include('website.urls')),
 ]
 

@@ -1,0 +1,16 @@
+{% extends "admin/base_site.html" %}
+{% load static %}
+
+{% block extrahead %}
+{{ block.super }}
+{% with nav_logo=NavigationLogo.get_active_logo %}
+    {% if nav_logo and nav_logo.logo %}
+        <link rel="icon" type="image/png" href="{{ nav_logo.logo.url }}">
+        <link rel="apple-touch-icon" href="{{ nav_logo.logo.url }}">
+    {% else %}
+        <link rel="icon" type="image/svg+xml" href="{% static 'images/favicon.svg' %}">
+        <link rel="apple-touch-icon" href="{% static 'images/favicon.svg' %}">
+    {% endif %}
+{% endwith %}
+{% endblock %}
+

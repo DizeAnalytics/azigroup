@@ -56,8 +56,8 @@ Assurez-vous que ces variables sont lues dans `settings.py` (le projet peut déj
 ## 📁 Structure (extrait)
 
 ```
-AZI_GROUP/
-├── azigroup_project/
+IBC_SARL/
+├── IBC_SARL/
 │   ├── settings.py
 │   ├── urls.py
 │   └── wsgi.py

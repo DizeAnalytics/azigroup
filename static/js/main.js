@@ -1,18 +1,35 @@
-// JavaScript principal pour le site AZI GROUP
+// JavaScript principal pour le site IBC Sarl BTP
 
-// Toggle mobile menu
+// Toggle mobile menu professionnel
 function toggleMenu() {
     const navLinks = document.querySelector('.nav-links');
     const hamburger = document.querySelector('.hamburger');
+    const overlay = document.querySelector('.nav-overlay');
+    const willOpen = !navLinks.classList.contains('active');
+
     navLinks.classList.toggle('active');
     hamburger.classList.toggle('active');
+
+    if (hamburger) hamburger.setAttribute('aria-expanded', willOpen ? 'true' : 'false');
+    if (overlay) overlay.classList.toggle('active');
+
+    // Empêcher le scroll du body quand le menu est ouvert
+    document.body.style.overflow = willOpen ? 'hidden' : '';
 }
 
 function closeMenu() {
     const navLinks = document.querySelector('.nav-links');
     const hamburger = document.querySelector('.hamburger');
+    const overlay = document.querySelector('.nav-overlay');
     navLinks.classList.remove('active');
     hamburger.classList.remove('active');
+    if (hamburger) {
+        hamburger.setAttribute('aria-expanded', 'false');
+    }
+    if (overlay) {
+        overlay.classList.remove('active');
+    }
+    document.body.style.overflow = '';
 }
 
 // Smooth scrolling pour les liens d'ancrage
@@ -57,32 +74,68 @@ document.addEventListener('DOMContentLoaded', function() {
             const formData = new FormData(this);
             const data = Object.fromEntries(formData);
             
+            // Log pour débogage
+            console.log('Données du formulaire:', data);
+            
             // Validation côté client
             if (!data.name || !data.email || !data.message) {
                 showFlashMessage('Veuillez remplir tous les champs obligatoires.', 'error');
                 return;
             }
             
+            // Nettoyer les données vides (les convertir en null pour les champs optionnels)
+            if (!data.phone || data.phone.trim() === '') {
+                delete data.phone;
+            }
+            if (!data.company || data.company.trim() === '') {
+                delete data.company;
+            }
+            if (!data.service || data.service.trim() === '') {
+                delete data.service;
+            }
+            
+            // Récupérer le token CSRF
+            const csrftoken = getCookie('csrftoken') || document.querySelector('[name=csrfmiddlewaretoken]')?.value;
+            
+            console.log('Données envoyées:', JSON.stringify(data));
+            
             // Envoi AJAX
-            fetch('/api/contact', {
+            fetch('/api/contact/', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
+                    'X-CSRFToken': csrftoken || ''
                 },
                 body: JSON.stringify(data)
             })
-            .then(response => response.json())
+            .then(response => {
+                // Vérifier si la réponse est OK
+                if (!response.ok) {
+                    return response.json().then(data => {
+                        throw new Error(data.message || 'Erreur serveur');
+                    });
+                }
+                return response.json();
+            })
             .then(result => {
                 if (result.success) {
                     showFlashMessage(result.message, 'success');
                     contactForm.reset();
                 } else {
-                    showFlashMessage(result.message, 'error');
+                    // Afficher les erreurs détaillées si disponibles
+                    let errorMessage = result.message || 'Une erreur est survenue';
+                    if (result.errors) {
+                        const errorList = Object.values(result.errors).flat().join(', ');
+                        if (errorList) {
+                            errorMessage += ': ' + errorList;
+                        }
+                    }
+                    showFlashMessage(errorMessage, 'error');
                 }
             })
             .catch(error => {
                 console.error('Error:', error);
-                showFlashMessage('Une erreur est survenue lors de l\'envoi du message.', 'error');
+                showFlashMessage(error.message || 'Une erreur est survenue lors de l\'envoi du message.', 'error');
             });
         });
     }
@@ -264,6 +317,22 @@ function formatDate(dateString) {
         month: 'long',
         day: 'numeric'
     });
+}
+
+// Fonction pour récupérer un cookie
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
 }
 
 // Fonction pour copier du texte dans le presse-papiers

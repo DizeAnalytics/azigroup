@@ -1,0 +1,42 @@
+{% extends "admin/login.html" %}
+{% load i18n static %}
+
+{% block extrastyle %}
+{{ block.super }}
+<style>
+    #header {
+        background: #E45B40;
+    }
+    .login #header h1 {
+        color: white;
+    }
+    .login #header h1 a {
+        color: white;
+    }
+    .submit-row input {
+        background: #E45B40;
+        border-color: #CC4D3D;
+    }
+    .submit-row input:hover {
+        background: #CC4D3D;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+{{ block.super }}
+<script>
+    // Modifier le label pour indiquer qu'on peut utiliser email ou username
+    document.addEventListener('DOMContentLoaded', function() {
+        const usernameLabel = document.querySelector('label[for="id_username"]');
+        if (usernameLabel) {
+            usernameLabel.textContent = "E-mail ou nom d'utilisateur:";
+        }
+        const usernameInput = document.querySelector('#id_username');
+        if (usernameInput) {
+            usernameInput.placeholder = "votre.email@exemple.com ou nom d'utilisateur";
+            usernameInput.type = "text"; // Permet email ou username
+        }
+    });
+</script>
+{% endblock %}

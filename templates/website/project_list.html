@@ -1,0 +1,587 @@
+{% extends 'website/base.html' %}
+{% load static %}
+
+{% block title %}Projets - IBC Sarl BTP{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Mini container (le projet n'utilise pas Bootstrap globalement) */
+    .container {
+        width: 100%;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 2rem;
+    }
+
+    /* Hero Section moderne */
+    .projects-hero {
+        background: radial-gradient(circle at top left, #28a745 0%, #1e3c72 45%, #121826 100%);
+        padding: 80px 0 60px;
+        color: white;
+        margin-bottom: 0;
+        /* IMPORTANT: annule la règle globale `section { max-width: 1200px; }` */
+        max-width: none;
+        width: 100%;
+        border-radius: 0;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .projects-hero::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background:
+            radial-gradient(circle at 10% 10%, rgba(34, 197, 94, 0.25), transparent 45%),
+            radial-gradient(circle at 80% 20%, rgba(14, 165, 233, 0.22), transparent 40%),
+            radial-gradient(circle at 40% 90%, rgba(99, 102, 241, 0.18), transparent 55%);
+        pointer-events: none;
+    }
+    
+    /* Overlay sombre quand une image de fond est utilisée */
+    .projects-hero[style*="background-image"]::before {
+        background: rgba(0, 0, 0, 0.5);
+    }
+
+    .projects-hero > .container {
+        position: relative;
+        z-index: 1;
+    }
+
+    .projects-hero-inner {
+        display: grid;
+        grid-template-columns: minmax(0, 2fr) minmax(0, 1.3fr);
+        gap: 2.5rem;
+        align-items: center;
+    }
+
+    .projects-hero h1 {
+        font-size: 2.4rem;
+        font-weight: 800;
+        margin-bottom: 0.75rem;
+        letter-spacing: 0.04em;
+    }
+
+    .projects-hero p {
+        font-size: 1rem;
+        opacity: 0.92;
+        margin-bottom: 1.5rem;
+        max-width: 500px;
+    }
+
+    .projects-hero-breadcrumb {
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        letter-spacing: 0.18em;
+        color: rgba(255, 255, 255, 0.7);
+        margin-bottom: 0.75rem;
+    }
+
+    .projects-hero-badges {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+        margin-top: 0.5rem;
+    }
+
+    .projects-hero-badge {
+        padding: 0.4rem 0.9rem;
+        border-radius: 999px;
+        font-size: 0.8rem;
+        background: rgba(0, 0, 0, 0.3);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+    }
+
+    .projects-hero-badge span {
+        font-weight: 600;
+    }
+
+    .projects-hero-metrics {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 1rem;
+    }
+
+    .projects-metric-card {
+        background: radial-gradient(circle at top, rgba(255, 255, 255, 0.12), transparent 55%);
+        border-radius: 16px;
+        padding: 1rem 1.1rem;
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+    }
+
+    .projects-metric-label {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        color: rgba(255, 255, 255, 0.75);
+        margin-bottom: 0.4rem;
+    }
+
+    .projects-metric-value {
+        font-size: 1.3rem;
+        font-weight: 700;
+    }
+
+    .projects-section {
+        background-color: #f8f9fa;
+        min-height: 600px;
+    }
+
+    /* Filtres */
+    .project-filters {
+        padding: 30px;
+        background: #fff;
+        margin-bottom: 40px;
+        border-radius: 20px;
+        box-shadow: 0 15px 35px rgba(0,0,0,0.06);
+        border: 1px solid rgba(0,0,0,0.02);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .project-filters::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 4px;
+        background: linear-gradient(90deg, #1e3c72 0%, #28a745 100%);
+    }
+
+    .filter-label {
+        font-size: 0.75rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1.2px;
+        color: #6c757d;
+        margin-bottom: 10px;
+        display: block;
+    }
+
+    .form-select-custom {
+        padding: 14px 20px;
+        border-radius: 10px;
+        border: 1px solid #eef0f2;
+        background-color: #f8f9fa;
+        font-size: 0.95rem;
+        color: #2c3e50;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        width: 100%;
+        appearance: none;
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%2328a745' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
+        background-repeat: no-repeat;
+        background-position: right 1rem center;
+        background-size: 16px 12px;
+    }
+
+    .form-select-custom:focus {
+        border-color: #28a745;
+        box-shadow: 0 0 0 4px rgba(40, 167, 69, 0.1);
+        background-color: #fff;
+        outline: none;
+    }
+
+    .btn-filter-custom {
+        width: 100%;
+        padding: 14px;
+        border-radius: 10px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+        border: none;
+        color: white;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+    }
+
+    .btn-filter-custom:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(40, 167, 69, 0.4);
+    }
+
+    /* Grille de projets */
+    .projects-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 3rem;
+        margin-top: 1rem;
+    }
+
+    /* Cartes de projets */
+    .project-card {
+        background: #0f172a;
+        border-radius: 22px;
+        overflow: hidden;
+        box-shadow: 0 20px 50px rgba(15, 23, 42, 0.5);
+        border: 1px solid rgba(15, 23, 42, 0.9);
+        display: flex;
+        flex-direction: column;
+        min-height: 100%;
+        transform: translateY(0);
+        transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    }
+
+    .project-card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 26px 70px rgba(15, 23, 42, 0.7);
+        border-color: #22c55e;
+    }
+
+    .project-media {
+        position: relative;
+        height: 210px;
+        overflow: hidden;
+        background: radial-gradient(circle at top left, #22c55e, #1d4ed8);
+    }
+
+    .project-media img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transform: scale(1);
+        transition: transform 0.5s ease;
+    }
+
+    .project-card:hover .project-media img {
+        transform: scale(1.06);
+    }
+
+    .project-overlay-gradient {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(to top, rgba(15, 23, 42, 0.85), transparent 55%);
+    }
+
+    .project-badge {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        padding: 5px 12px;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        z-index: 10;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    }
+    
+    .status-en_cours { background-color: #facc15; color: #1f2937; }
+    .status-realise { background-color: #22c55e; color: white; }
+
+    .project-body {
+        padding: 1.5rem 1.5rem 1.25rem;
+        color: #e5e7eb;
+        display: flex;
+        flex-direction: column;
+        gap: 0.8rem;
+    }
+
+    .project-title {
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: #f9fafb;
+        margin: 0;
+    }
+
+    .project-partners {
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: #6ee7b7;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.35rem;
+        align-items: center;
+    }
+
+    .project-description {
+        font-size: 0.95rem;
+        color: #9ca3af;
+        line-height: 1.6;
+        margin-bottom: 0.5rem;
+    }
+
+    .project-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        font-size: 0.8rem;
+        color: #d1d5db;
+    }
+
+    .project-meta-pill {
+        padding: 0.35rem 0.7rem;
+        border-radius: 999px;
+        border: 1px solid rgba(148, 163, 184, 0.6);
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        background: rgba(15, 23, 42, 0.8);
+    }
+
+    .project-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 1.5rem 1.4rem;
+        margin-top: auto;
+    }
+
+    .project-tagline {
+        font-size: 0.8rem;
+        color: #6b7280;
+    }
+
+    .btn-project {
+        background: linear-gradient(135deg, #22c55e 0%, #16a34a 40%, #0ea5e9 100%);
+        color: white;
+        border-radius: 999px;
+        padding: 0.55rem 1.5rem;
+        font-size: 0.9rem;
+        font-weight: 600;
+        border: none;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        box-shadow: 0 10px 25px rgba(34, 197, 94, 0.4);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .btn-project:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 18px 35px rgba(34, 197, 94, 0.55);
+        color: white;
+    }
+
+    .btn-project span {
+        font-size: 1rem;
+    }
+
+    @media (max-width: 992px) {
+        .projects-hero-inner {
+            grid-template-columns: minmax(0, 1fr);
+        }
+    }
+
+    @media (max-width: 768px) {
+        .projects-hero {
+            padding: 70px 0 40px;
+        }
+
+        .projects-hero h1 {
+            font-size: 1.9rem;
+        }
+
+        .projects-hero-metrics {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+    }
+
+    @media (max-width: 576px) {
+        .projects-hero-metrics {
+            grid-template-columns: minmax(0, 1fr);
+        }
+    }
+
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="projects-hero" {% if navbar_logo_url %}style="background-image: url('{{ navbar_logo_url }}'); background-size: cover; background-position: center; background-repeat: no-repeat;"{% elif navigation_logo and navigation_logo.logo %}style="background-image: url('{{ navigation_logo.logo.url }}'); background-size: cover; background-position: center; background-repeat: no-repeat;"{% endif %}>
+    <div class="container">
+        <div class="projects-hero-inner">
+            <div>
+                <div class="projects-hero-breadcrumb">
+                    Portefeuille de projets · IBC SARL BTP
+                </div>
+                <h1>Nos réalisations et chantiers en cours</h1>
+                <p>
+                    Une sélection de projets structurants portés par IBC SARL BTP et ses partenaires,
+                    du bâtiment aux infrastructures stratégiques.
+                </p>
+
+                <div class="projects-hero-badges">
+                    <div class="projects-hero-badge">
+                        <span>✓</span> Projets publics & privés
+                    </div>
+                    <div class="projects-hero-badge">
+                        <span>🌍</span> Togo et sous-région
+                    </div>
+                    <div class="projects-hero-badge">
+                        <span>🏗️</span> Bâtiments, voiries, infrastructures
+                    </div>
+                </div>
+            </div>
+            <div class="projects-hero-metrics">
+                <div class="projects-metric-card">
+                    <div class="projects-metric-label">Projets listés</div>
+                    <div class="projects-metric-value">
+                        {{ projects.paginator.count|default:0 }}
+                    </div>
+                </div>
+                <div class="projects-metric-card">
+                    <div class="projects-metric-label">En cours</div>
+                    <div class="projects-metric-value">
+                        {{ projects.paginator.count|default:0 }}
+                    </div>
+                </div>
+                <div class="projects-metric-card">
+                    <div class="projects-metric-label">Partenaires actifs</div>
+                    <div class="projects-metric-value">
+                        {{ companies|length }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="projects-section py-5">
+    <div class="container">
+        <!-- Filters -->
+        <div class="project-filters">
+            <form method="get" class="row g-4 align-items-end">
+                <div class="col-md-4">
+                    <label for="status" class="filter-label">Statut du projet</label>
+                    <select name="status" id="status" class="form-select-custom">
+                        <option value="">Tous les statuts</option>
+                        <option value="en_cours" {% if current_status == 'en_cours' %}selected{% endif %}>En cours</option>
+                        <option value="realise" {% if current_status == 'realise' %}selected{% endif %}>Réalisé</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label for="company" class="filter-label">Partenaire</label>
+                    <select name="company" id="company" class="form-select-custom">
+                        <option value="">Tous les partenaires</option>
+                        {% for company in companies %}
+                        <option value="{{ company.slug }}" {% if current_company == company.slug %}selected{% endif %}>{{ company.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <button type="submit" class="btn-filter-custom">
+                        <i class="fas fa-filter me-2"></i> Filtrer les résultats
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Projects Grid -->
+        <div class="projects-grid">
+            {% for project in projects %}
+            <div class="project-card">
+                <div class="project-media">
+                    {% if project.image %}
+                        <img src="{{ project.image.url }}" alt="{{ project.title }}">
+                    {% else %}
+                        <div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:3rem;color:white;opacity:0.9;">
+                            🏗️
+                        </div>
+                    {% endif %}
+                    <div class="project-overlay-gradient"></div>
+                    <span class="project-badge status-{{ project.status }}">
+                        {{ project.get_status_display }}
+                    </span>
+                </div>
+                <div class="project-body">
+                    <h3 class="project-title">{{ project.title|truncatechars:55 }}</h3>
+                    <div class="project-partners">
+                        <span style="opacity:0.8;">Partenaires :</span>
+                        {% for partner in project.partners.all %}
+                            {{ partner.name }}{% if not forloop.last %},{% endif %}
+                        {% empty %}
+                            IBC SARL
+                        {% endfor %}
+                    </div>
+                    <p class="project-description">
+                        {{ project.description|truncatewords:24 }}
+                    </p>
+                    <div class="project-meta">
+                        {% if project.location %}
+                        <div class="project-meta-pill">
+                            <span>📍</span>
+                            <span>{{ project.location }}</span>
+                        </div>
+                        {% endif %}
+                        <div class="project-meta-pill">
+                            <span>📅</span>
+                            <span>
+                                {% if project.start_date %}
+                                    {{ project.start_date|date:"d/m/Y" }}
+                                {% else %}
+                                    Date à confirmer
+                                {% endif %}
+                                {% if project.completion_date %}
+                                    – {{ project.completion_date|date:"d/m/Y" }}
+                                {% endif %}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="project-footer">
+                    <div class="project-tagline">
+                        Détails techniques, budget, planning et photos de chantier.
+                    </div>
+                    <a href="{% url 'website:project_detail' project.slug %}" class="btn-project">
+                        Voir le projet
+                        <span>→</span>
+                    </a>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12 text-center py-5" style="grid-column: 1 / -1;">
+                <div class="py-5 bg-white rounded-3 shadow-sm">
+                    <span style="font-size: 3rem; opacity: 0.5;">🔍</span>
+                    <p class="h4 text-muted mt-3">Aucun projet trouvé avec ces critères.</p>
+                    <a href="{% url 'website:project_list' %}" class="btn btn-outline-secondary mt-2">Réinitialiser les filtres</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Pagination -->
+        {% if projects.has_other_pages %}
+        <div class="row mt-5">
+            <div class="col-12">
+                <nav aria-label="Page navigation">
+                    <ul class="pagination justify-content-center">
+                        {% if projects.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link text-success" href="?page=1{% if current_status %}&status={{ current_status }}{% endif %}{% if current_company %}&company={{ current_company }}{% endif %}">&laquo;</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link text-success" href="?page={{ projects.previous_page_number }}{% if current_status %}&status={{ current_status }}{% endif %}{% if current_company %}&company={{ current_company }}{% endif %}">&lsaquo;</a>
+                        </li>
+                        {% endif %}
+
+                        <li class="page-item active">
+                            <span class="page-link bg-success border-success">Page {{ projects.number }} sur {{ projects.paginator.num_pages }}</span>
+                        </li>
+
+                        {% if projects.has_next %}
+                        <li class="page-item">
+                            <a class="page-link text-success" href="?page={{ projects.next_page_number }}{% if current_status %}&status={{ current_status }}{% endif %}{% if current_company %}&company={{ current_company }}{% endif %}">&rsaquo;</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link text-success" href="?page={{ projects.paginator.num_pages }}{% if current_status %}&status={{ current_status }}{% endif %}{% if current_company %}&company={{ current_company }}{% endif %}">&raquo;</a>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

@@ -1,28 +1,358 @@
 {% extends 'website/base.html' %}
 {% load static %}
+{% load l10n %}
+
+{% block title %}IBC Sarl BTP - Entreprise de BTP au Togo{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* --- Homepage carousel (mobile-first) --- */
+    .hp-carousel {
+        position: relative;
+        /* Override global `section{max-width... padding...}` to be full-bleed */
+        max-width: none;
+        width: 100vw;
+        margin: 60px 0 0; /* header fixed */
+        padding: 0;
+        background: #0b1220;
+        overflow: hidden;
+    }
+
+    .hp-carousel-track {
+        display: flex;
+        transition: transform 500ms ease;
+        will-change: transform;
+    }
+
+    .hp-slide {
+        min-width: 100%;
+        position: relative;
+        /* Full screen hero */
+        height: calc(100vh - 60px);
+        min-height: 560px;
+        max-height: none;
+        display: flex;
+        align-items: stretch;
+        justify-content: center;
+        background: #0b1220;
+    }
+
+    @media (max-width: 480px) {
+        .hp-slide {
+            min-height: 620px;
+            height: calc(100vh - 60px);
+        }
+    }
+
+    .hp-slide-bg {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+        transform: scale(1.02);
+        filter: saturate(1.05) contrast(1.02);
+    }
+
+    .hp-slide-overlay {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(90deg, rgba(11,18,32,0.78) 0%, rgba(11,18,32,0.55) 40%, rgba(11,18,32,0.15) 70%, rgba(11,18,32,0.05) 100%);
+    }
+
+    .hp-slide-inner {
+        position: relative;
+        z-index: 2;
+        width: 100%;
+        max-width: 1200px;
+        padding: 40px 16px 72px; /* more breathing room, keep controls visible */
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: 1fr;
+        align-items: center;
+    }
+
+    @media (min-width: 900px) {
+        .hp-slide-inner {
+            padding: 56px 24px 84px;
+            grid-template-columns: 1.05fr 0.95fr;
+            gap: 24px;
+        }
+    }
+
+    .hp-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 12px;
+        border-radius: 999px;
+        background: rgba(255,255,255,0.12);
+        border: 1px solid rgba(255,255,255,0.25);
+        color: rgba(255,255,255,0.92);
+        font-weight: 800;
+        letter-spacing: 0.02em;
+        width: fit-content;
+    }
+
+    .hp-h1 {
+        margin: 14px 0 10px;
+        color: #fff;
+        font-size: 2rem;
+        line-height: 1.12;
+        font-weight: 900;
+        letter-spacing: -0.02em;
+        text-shadow: 0 12px 30px rgba(0,0,0,0.35);
+    }
+
+    @media (min-width: 768px) {
+        .hp-h1 { font-size: 2.7rem; }
+    }
+
+    .hp-p {
+        margin: 0;
+        color: rgba(255,255,255,0.9);
+        line-height: 1.65;
+        font-size: 1.05rem;
+        max-width: 62ch;
+        text-shadow: 0 10px 26px rgba(0,0,0,0.35);
+    }
+
+    .hp-cta {
+        margin-top: 16px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        align-items: center;
+    }
+
+    .hp-btn {
+        display: inline-block;
+        padding: 12px 18px;
+        border-radius: 999px;
+        font-weight: 900;
+        letter-spacing: 0.02em;
+        text-decoration: none;
+        transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+        border: 1px solid rgba(255,255,255,0.25);
+    }
+
+    .hp-btn-primary {
+        background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+        color: #fff;
+        box-shadow: 0 12px 26px rgba(40,167,69,0.25);
+        border: 0;
+    }
+
+    .hp-btn-primary:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 16px 30px rgba(40,167,69,0.32);
+    }
+
+    .hp-btn-secondary {
+        background: rgba(255,255,255,0.10);
+        color: #fff;
+    }
+
+    .hp-btn-secondary:hover {
+        transform: translateY(-1px);
+        background: rgba(255,255,255,0.14);
+    }
+
+    /* controls */
+    .hp-controls {
+        position: absolute;
+        inset: auto 0 18px 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        z-index: 5;
+        pointer-events: none;
+    }
+
+    .hp-dotbar {
+        display: flex;
+        gap: 8px;
+        padding: 8px 10px;
+        border-radius: 999px;
+        background: rgba(0,0,0,0.25);
+        border: 1px solid rgba(255,255,255,0.12);
+        pointer-events: auto;
+    }
+
+    .hp-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 999px;
+        background: rgba(255,255,255,0.45);
+        border: 0;
+        cursor: pointer;
+        transition: transform 0.2s ease, background 0.2s ease;
+    }
+
+    .hp-dot[aria-selected="true"] {
+        background: #fff;
+        transform: scale(1.1);
+    }
+
+    .hp-arrow {
+        pointer-events: auto;
+        width: 42px;
+        height: 42px;
+        border-radius: 999px;
+        border: 1px solid rgba(255,255,255,0.18);
+        background: rgba(0,0,0,0.25);
+        color: #fff;
+        cursor: pointer;
+        transition: transform 0.2s ease, background 0.2s ease;
+    }
+
+    .hp-arrow:hover {
+        transform: translateY(-1px);
+        background: rgba(0,0,0,0.35);
+    }
+
+    /* Presentation section refinement to match new hero */
+    .presentation-section {
+        padding: 52px 16px;
+    }
+    .presentation-title {
+        font-size: 2.6rem;
+        color: #E45B40 !important;
+    }
+    .presentation-subtitle {
+        max-width: 70ch;
+        margin: 0 auto;
+    }
+    /* Carte de texte introductif en italique sur l'accueil */
+    .about-intro-card {
+        background: #ffffff;
+        border-radius: 16px;
+        padding: 2.5rem 2rem;
+        box-shadow: 0 18px 45px rgba(15, 23, 42, 0.12);
+        border: 1px solid #e5e7eb;
+        font-style: italic;
+        line-height: 1.8;
+        color: #4b5563;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .about-intro-card::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background:
+            radial-gradient(circle at 0% 0%, rgba(34, 197, 94, 0.06), transparent 55%),
+            radial-gradient(circle at 100% 0%, rgba(59, 130, 246, 0.06), transparent 55%);
+        pointer-events: none;
+    }
+
+    .about-intro-card p {
+        margin-bottom: 1.4rem;
+    }
+
+    .about-intro-card p:last-child {
+        margin-bottom: 0;
+    }
+
+    @media (max-width: 768px) {
+        .presentation-title { font-size: 2rem; }
+        .presentation-section { padding: 36px 16px; }
+        .about-intro-card {
+            padding: 1.75rem 1.4rem;
+        }
+    }
+    
+    /* Photo ronde avec bordure orange pour "Qui Sommes-Nous ?" */
+    .about-image-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 2.5rem;
+    }
+    
+    .about-section-image {
+        width: 200px;
+        height: 200px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 5px solid #E45B40;
+        box-shadow: 0 8px 24px rgba(228, 91, 64, 0.25);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .about-section-image:hover {
+        transform: scale(1.05);
+        box-shadow: 0 12px 32px rgba(228, 91, 64, 0.35);
+    }
+    
+    @media (max-width: 768px) {
+        .about-section-image {
+            width: 160px;
+            height: 160px;
+            border-width: 4px;
+        }
+    }
+</style>
+{% endblock %}
 
 {% block content %}
-<!-- Hero Section -->
-{% if hero_section %}
-<section id="accueil" class="hero" style="background-image: url('{{ hero_section.background_image.url }}'); background-size: cover; background-position: center; background-repeat: no-repeat;">
-    <div class="hero-overlay" style="opacity: {{ hero_section.overlay_opacity }};">
-        <!-- Image de fond uniquement -->
+<!-- Carousel Hero -->
+{% if homepage_slides %}
+<section class="hp-carousel" aria-label="Carrousel d'accueil">
+    <div class="hp-carousel-track" id="hpCarouselTrack">
+        {% for slide in homepage_slides %}
+        <div class="hp-slide" data-index="{{ forloop.counter0 }}">
+            <img class="hp-slide-bg" src="{{ slide.image.url }}" alt="{{ slide.title }}">
+            <div class="hp-slide-overlay" style="opacity: {{ slide.overlay_opacity|unlocalize }};"></div>
+            <div class="hp-slide-inner">
+                <div>
+                    <div class="hp-pill">IBC SARL BTP · BTP & Infrastructures</div>
+                    <h1 class="hp-h1">{{ slide.title }}</h1>
+                    {% if slide.subtitle %}
+                    <p class="hp-p">{{ slide.subtitle }}</p>
+                    {% endif %}
+                    <div class="hp-cta">
+                        {% if slide.button_text and slide.button_url %}
+                        <a class="hp-btn hp-btn-primary" href="{{ slide.button_url }}">{{ slide.button_text }}</a>
+                        {% endif %}
+                        <a class="hp-btn hp-btn-secondary" href="{% url 'website:project_list' %}">Voir nos projets</a>
+                        <a class="hp-btn hp-btn-secondary" href="{% url 'website:contact' %}">Demander un devis</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="hp-controls" aria-label="Contrôles du carrousel">
+        <button type="button" class="hp-arrow" id="hpPrev" aria-label="Slide précédent">‹</button>
+        <div class="hp-dotbar" id="hpDots" role="tablist" aria-label="Navigation par points">
+            {% for slide in homepage_slides %}
+            <button type="button" class="hp-dot" role="tab" aria-label="Aller au slide {{ forloop.counter }}" aria-selected="{% if forloop.first %}true{% else %}false{% endif %}" data-go="{{ forloop.counter0 }}"></button>
+            {% endfor %}
+        </div>
+        <button type="button" class="hp-arrow" id="hpNext" aria-label="Slide suivant">›</button>
     </div>
 </section>
+{% elif hero_section %}
+<!-- Fallback hero (ancienne config) -->
+<section id="accueil" class="hero" style="background-image: url('{{ hero_section.background_image.url }}'); background-size: cover; background-position: center; background-repeat: no-repeat;">
+    <div class="hero-overlay" style="opacity: {{ hero_section.overlay_opacity|unlocalize }};"></div>
+</section>
 {% else %}
-<!-- Fallback si aucune section hero n'est configurée -->
-<section id="accueil" class="hero" style="background-image: url('{% static 'images/AZI GROUP.PNG' %}'); background-size: cover; background-position: center; background-repeat: no-repeat;">
-    <div class="hero-overlay">
-        <!-- Image de fond uniquement -->
-    </div>
+<section id="accueil" class="hero" style="background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);">
+    <div class="hero-overlay"></div>
 </section>
 {% endif %}
 
 <!-- Section de présentation -->
 <section class="presentation-section">
     <div class="presentation-content">
-        <h1 class="presentation-title">AZI GROUP</h1>
-        <p class="presentation-subtitle">Excellence Opérationnelle au Service de l'Impact en Afrique de l'Ouest</p>
+        <h1 class="presentation-title">IBC Sarl BTP</h1>
+        <p class="presentation-subtitle">Nous construisons, réhabilitons et maintenons des infrastructures durables, avec un pilotage rigoureux des coûts, des délais et de la sécurité.</p>
     </div>
 </section>
 
@@ -30,17 +360,24 @@
 <section id="apropos">
     <h2 class="section-title">Qui Sommes-Nous ?</h2>
     <div class="about-content">
-        <p>AZI Group est un groupement entrepreneurial qui opère l'essentiel des besoins des grandes organisations et des ONGs au Mali et en Afrique de l'Ouest. Notre écosystème réunit <strong>Global Songhoy Services</strong> (aménagements hydro-agricoles, forages d'eau, BTP, commerce général), <strong>Sogis</strong> (immobilier & facility management), <strong>Société Golden</strong> (transport & logistique) et <strong>Angnie Mali</strong> (propreté & sanitation).</p>
-        
-        <p style="margin-top: 1.5rem;">Nous livrons des opérations fiables, conformes et mesurées grâce à des KPI contractuels, une traçabilité complète des activités et des standards HSE exigeants. Notre promesse : transformer des cahiers des charges complexes en résultats concrets, dans les délais et budgets convenus, avec un reporting transparent et des équipes locales formées.</p>
-        
-        <p style="margin-top: 1.5rem;">Qu'il s'agisse de projets d'infrastructures rurales, de points d'eau, d'ouverture de bureaux, de mobilité du personnel ou de propreté multi-sites, AZI Group offre un interlocuteur unique, une exécution disciplinée et une amélioration continue au service de l'impact.</p>
+        {% if about_image %}
+        <div class="about-image-wrapper">
+            <img src="{{ about_image.image.url }}" alt="IBC Sarl BTP" class="about-section-image">
+        </div>
+        {% endif %}
+        <div class="about-intro-card">
+            <p>IBC Sarl BTP est une entreprise togolaise spécialisée en BTP, engagée dans la construction, la réhabilitation et la maintenance d'ouvrages publics et privés. Nous accompagnons les maîtres d'ouvrage, entreprises et institutions dans la réalisation de leurs projets d'infrastructures.</p>
+            
+            <p>Nous livrons des chantiers conformes aux normes, avec une forte exigence en matière de qualité, de sécurité et de délais. Notre promesse : transformer des cahiers des charges complexes en réalisations concrètes, avec un suivi de chantier rigoureux et un reporting transparent.</p>
+            
+            <p>Qu'il s'agisse de bâtiments administratifs, d'infrastructures scolaires et sanitaires, de logements ou de réhabilitations lourdes, IBC Sarl BTP offre un interlocuteur unique, une exécution disciplinée et une amélioration continue au service de vos projets au Togo et dans la sous-région.</p>
+        </div>
     </div>
 </section>
 
-<!-- Companies Section -->
+<!-- Companies / Partners Section -->
 <section id="groupements">
-    <h2 class="section-title">Nos Groupements</h2>
+    <h2 class="section-title">Nos Partenaires</h2>
     <div class="companies-grid">
         {% for company in companies %}
         <div class="company-card">
@@ -134,64 +471,88 @@
 </section>
 {% endif %}
 
-<!-- Contact Section -->
-<section id="contact" class="contact-section">
-    <div class="contact-container">
-        <h2 class="section-title" style="color: white;">Contactez-Nous</h2>
-        
-        <form class="contact-form" method="POST" action="{% url 'website:contact' %}">
-            {% csrf_token %}
-            <div class="form-group">
-                <label for="name">Nom complet *</label>
-                <input type="text" id="name" name="name" required>
-            </div>
+{% endblock %}
 
-            <div class="form-group">
-                <label for="email">Email *</label>
-                <input type="email" id="email" name="email" required>
-            </div>
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const track = document.getElementById('hpCarouselTrack');
+    if (!track) return;
 
-            <div class="form-group">
-                <label for="phone">Téléphone</label>
-                <input type="tel" id="phone" name="phone">
-            </div>
+    const slides = Array.from(track.querySelectorAll('.hp-slide'));
+    const dotsWrap = document.getElementById('hpDots');
+    const dots = dotsWrap ? Array.from(dotsWrap.querySelectorAll('.hp-dot')) : [];
+    const prevBtn = document.getElementById('hpPrev');
+    const nextBtn = document.getElementById('hpNext');
 
-            <div class="form-group">
-                <label for="company">Entreprise/Organisation</label>
-                <input type="text" id="company" name="company">
-            </div>
+    let index = 0;
+    let timer = null;
+    const intervalMs = 6500;
+    const prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-            <div class="form-group">
-                <label for="service">Service concerné</label>
-                <select id="service" name="service">
-                    <option value="">-- Sélectionnez --</option>
-                    <option value="azi_group">AZI GROUP</option>
-                    <option value="gss">Global Songhoy Services (GSS)</option>
-                    <option value="sogis">Sogis - Immobilier</option>
-                    <option value="golden">Société Golden - Transport</option>
-                    <option value="angnie">Angnie Mali - Propreté</option>
-                </select>
-            </div>
+    function setActiveDot(i) {
+        dots.forEach((d, di) => d.setAttribute('aria-selected', di === i ? 'true' : 'false'));
+    }
 
-            <div class="form-group">
-                <label for="message">Message *</label>
-                <textarea id="message" name="message" required></textarea>
-            </div>
+    function goTo(i) {
+        index = (i + slides.length) % slides.length;
+        track.style.transform = `translateX(${-index * 100}%)`;
+        setActiveDot(index);
+    }
 
-            <button type="submit" class="submit-btn">Envoyer le message</button>
-        </form>
+    function start() {
+        if (prefersReduced) return;
+        stop();
+        timer = setInterval(() => goTo(index + 1), intervalMs);
+    }
 
-        <div class="contact-info">
-            <div class="contact-info-item">
-                <strong>📍 Adresse :</strong> Mali, Afrique de l'Ouest
-            </div>
-            <div class="contact-info-item">
-                <strong>📧 Email :</strong> contact@azigroup.com
-            </div>
-            <div class="contact-info-item">
-                <strong>📞 Téléphone :</strong> +223 XX XX XX XX
-            </div>
-        </div>
-    </div>
-</section>
+    function stop() {
+        if (timer) clearInterval(timer);
+        timer = null;
+    }
+
+    if (prevBtn) prevBtn.addEventListener('click', () => { goTo(index - 1); start(); });
+    if (nextBtn) nextBtn.addEventListener('click', () => { goTo(index + 1); start(); });
+
+    dots.forEach(d => {
+        d.addEventListener('click', () => {
+            const i = Number(d.getAttribute('data-go') || 0);
+            goTo(i);
+            start();
+        });
+    });
+
+    // Pause on hover/focus
+    const carousel = track.closest('.hp-carousel');
+    if (carousel) {
+        carousel.addEventListener('mouseenter', stop);
+        carousel.addEventListener('mouseleave', start);
+        carousel.addEventListener('focusin', stop);
+        carousel.addEventListener('focusout', start);
+    }
+
+    // Basic swipe for touch
+    let x0 = null;
+    track.addEventListener('touchstart', (e) => {
+        x0 = e.touches && e.touches[0] ? e.touches[0].clientX : null;
+        stop();
+    }, { passive: true });
+
+    track.addEventListener('touchend', (e) => {
+        if (x0 === null) return;
+        const x1 = e.changedTouches && e.changedTouches[0] ? e.changedTouches[0].clientX : null;
+        if (x1 === null) return;
+        const dx = x1 - x0;
+        if (Math.abs(dx) > 40) {
+            goTo(dx < 0 ? index + 1 : index - 1);
+        }
+        x0 = null;
+        start();
+    }, { passive: true });
+
+    // Init
+    goTo(0);
+    start();
+});
+</script>
 {% endblock %}

@@ -1,0 +1,634 @@
+{% extends 'website/base.html' %}
+{% load static %}
+
+{% block title %}{{ project.title }} - IBC Sarl BTP{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/lightbox.css' %}?v=1">
+<style>
+    /* Page layout (mobile-first) */
+    .project-detail-page {
+        background: #f8f9fa;
+        padding: 96px 16px 56px; /* header fixed + breathing room */
+    }
+
+    .project-detail-container {
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .project-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 18px;
+    }
+
+    @media (min-width: 992px) {
+        .project-grid {
+            grid-template-columns: minmax(0, 1fr) 360px;
+            gap: 24px;
+            align-items: start;
+        }
+    }
+
+    /* Card */
+    .pd-card {
+        background: #fff;
+        border-radius: 18px;
+        border: 1px solid rgba(0,0,0,0.06);
+        box-shadow: 0 12px 35px rgba(0,0,0,0.06);
+        overflow: hidden;
+    }
+
+    .pd-card--accent {
+        border-top: 4px solid #28a745;
+    }
+
+    /* Breadcrumb */
+    .pd-breadcrumbs {
+        font-size: 0.9rem;
+        color: rgba(0,0,0,0.6);
+        margin-bottom: 14px;
+    }
+
+    .pd-breadcrumbs a {
+        color: inherit;
+        text-decoration: none;
+        font-weight: 600;
+    }
+
+    .pd-breadcrumbs a:hover {
+        text-decoration: underline;
+    }
+
+    /* Hero (image centrée) */
+    .pd-hero {
+        padding: 18px;
+        background: radial-gradient(1200px 400px at 20% 10%, rgba(40,167,69,0.12), transparent 60%),
+                    radial-gradient(1200px 400px at 80% 0%, rgba(30,60,114,0.12), transparent 60%),
+                    #ffffff;
+        border-bottom: 1px solid rgba(0,0,0,0.06);
+    }
+
+    .pd-hero-inner {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    @media (min-width: 768px) {
+        .pd-hero-inner {
+            grid-template-columns: 1fr 420px;
+            align-items: center;
+        }
+    }
+
+    .pd-title {
+        color: #0f172a;
+        font-weight: 800;
+        letter-spacing: -0.02em;
+        font-size: 1.8rem;
+        line-height: 1.15;
+        margin: 6px 0 12px;
+    }
+
+    @media (min-width: 768px) {
+        .pd-title {
+            font-size: 2.2rem;
+        }
+    }
+
+    .pd-subtitle {
+        color: rgba(0,0,0,0.68);
+        margin: 0;
+        line-height: 1.7;
+        font-size: 1.02rem;
+    }
+
+    .pd-chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 14px;
+    }
+
+    .pd-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 12px;
+        border-radius: 999px;
+        background: rgba(0,0,0,0.04);
+        border: 1px solid rgba(0,0,0,0.06);
+        font-weight: 700;
+        font-size: 0.85rem;
+        letter-spacing: 0.02em;
+        color: rgba(0,0,0,0.78);
+    }
+
+    .pd-chip--success {
+        background: rgba(40,167,69,0.12);
+        border-color: rgba(40,167,69,0.28);
+        color: #155724;
+    }
+
+    .pd-chip--warning {
+        background: rgba(255,193,7,0.18);
+        border-color: rgba(255,193,7,0.4);
+        color: #664d03;
+    }
+
+    .pd-media {
+        border-radius: 16px;
+        overflow: hidden;
+        background: rgba(0,0,0,0.03);
+        border: 1px solid rgba(0,0,0,0.06);
+        aspect-ratio: 4 / 3;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .pd-media img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain; /* image centrée */
+        object-position: center;
+        display: block;
+        background: #fff;
+    }
+
+    .pd-media-placeholder {
+        font-size: 3rem;
+        opacity: 0.35;
+    }
+
+    /* Content */
+    .pd-content {
+        padding: 18px;
+    }
+
+    @media (min-width: 768px) {
+        .pd-content {
+            padding: 22px;
+        }
+    }
+
+    .pd-section-title {
+        color: #1e3c72;
+        font-weight: 800;
+        font-size: 1.15rem;
+        margin: 0 0 10px;
+        letter-spacing: -0.01em;
+    }
+
+    .pd-prose {
+        color: rgba(0,0,0,0.72);
+        line-height: 1.85;
+        font-size: 1.03rem;
+    }
+
+    .pd-callout {
+        margin-top: 18px;
+        padding: 16px;
+        border-radius: 14px;
+        background: rgba(40,167,69,0.08);
+        border: 1px solid rgba(40,167,69,0.25);
+        color: rgba(0,0,0,0.75);
+    }
+
+    /* Sidebar */
+    .pd-sidebar {
+        display: grid;
+        gap: 16px;
+    }
+
+    @media (min-width: 992px) {
+        .pd-sidebar {
+            position: sticky;
+            top: 86px; /* under fixed header */
+        }
+    }
+
+    .pd-side-header {
+        padding: 14px 16px;
+        border-bottom: 1px solid rgba(0,0,0,0.06);
+        background: rgba(0,0,0,0.02);
+        font-weight: 900;
+        color: rgba(0,0,0,0.82);
+        letter-spacing: -0.01em;
+    }
+
+    .pd-kv {
+        padding: 14px 16px;
+        border-bottom: 1px solid rgba(0,0,0,0.06);
+    }
+
+    .pd-kv:last-child {
+        border-bottom: 0;
+    }
+
+    .pd-k {
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        font-size: 0.72rem;
+        color: rgba(0,0,0,0.55);
+        font-weight: 800;
+        margin-bottom: 4px;
+    }
+
+    .pd-v {
+        color: rgba(0,0,0,0.82);
+        font-weight: 700;
+    }
+
+    /* Partner card */
+    .pd-partner {
+        padding: 16px;
+        text-align: center;
+    }
+
+    .pd-partner img {
+        max-height: 92px;
+        width: auto;
+        object-fit: contain;
+        display: inline-block;
+        margin-bottom: 10px;
+        border-radius: 10px;
+        background: #fff;
+    }
+
+    .pd-partner a {
+        display: inline-block;
+        margin-top: 10px;
+        text-decoration: none;
+    }
+
+    /* Gallery */
+    .pd-gallery {
+        margin-top: 18px;
+    }
+
+    .pd-gallery-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+    }
+
+    @media (min-width: 768px) {
+        .pd-gallery-grid {
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 14px;
+        }
+    }
+
+    .pd-thumb {
+        border-radius: 14px;
+        overflow: hidden;
+        border: 1px solid rgba(0,0,0,0.06);
+        background: rgba(0,0,0,0.03);
+        aspect-ratio: 4 / 3;
+    }
+
+    .pd-thumb img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+        display: block;
+        transition: transform 0.25s ease;
+    }
+
+    .pd-thumb:hover img {
+        transform: scale(1.04);
+    }
+
+    .pd-caption {
+        margin-top: 6px;
+        text-align: center;
+        font-size: 0.85rem;
+        color: rgba(0,0,0,0.55);
+    }
+
+    /* Related projects */
+    .pd-related {
+        margin-top: 26px;
+    }
+
+    .pd-related-header {
+        text-align: center;
+        margin-bottom: 14px;
+    }
+
+    .pd-related-title {
+        font-size: 1.6rem;
+        font-weight: 900;
+        letter-spacing: -0.02em;
+        color: #0f172a;
+        margin: 0 0 6px;
+    }
+
+    .pd-related-subtitle {
+        margin: 0;
+        color: rgba(0,0,0,0.6);
+    }
+
+    .pd-related-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 14px;
+    }
+
+    @media (min-width: 768px) {
+        .pd-related-grid {
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 18px;
+        }
+    }
+
+    .pd-related-card {
+        border-radius: 18px;
+        background: #fff;
+        border: 1px solid rgba(0,0,0,0.06);
+        box-shadow: 0 10px 28px rgba(0,0,0,0.06);
+        overflow: hidden;
+        position: relative;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .pd-related-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 14px 34px rgba(0,0,0,0.08);
+    }
+
+    .pd-related-img {
+        height: 190px;
+        background: rgba(0,0,0,0.03);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+    }
+
+    .pd-related-img img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+        display: block;
+    }
+
+    .pd-related-body {
+        padding: 14px 16px 16px;
+    }
+
+    .pd-related-body a {
+        text-decoration: none;
+        color: #0f172a;
+        font-weight: 900;
+        letter-spacing: -0.01em;
+    }
+
+    .pd-related-meta {
+        margin-top: 6px;
+        color: rgba(0,0,0,0.55);
+        font-size: 0.9rem;
+    }
+
+    .pd-cta {
+        margin-top: 14px;
+        text-align: center;
+    }
+
+    .pd-cta a {
+        display: inline-block;
+        padding: 12px 18px;
+        border-radius: 999px;
+        background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+        color: #fff;
+        text-decoration: none;
+        font-weight: 900;
+        letter-spacing: 0.02em;
+        box-shadow: 0 10px 22px rgba(40, 167, 69, 0.25);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .pd-cta a:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 14px 28px rgba(40, 167, 69, 0.32);
+    }
+
+    /* Lightbox styles are now in lightbox.css */
+    .pd-thumb {
+        cursor: pointer;
+        position: relative;
+    }
+    
+    .pd-thumb::after {
+        content: '🔍';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 2rem;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        pointer-events: none;
+    }
+    
+    .pd-thumb:hover::after {
+        opacity: 0.8;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="project-detail-page">
+    <div class="project-detail-container">
+        <div class="pd-breadcrumbs">
+            <a href="{% url 'website:index' %}">Accueil</a> <span aria-hidden="true">/</span>
+            <a href="{% url 'website:project_list' %}">Projets</a> <span aria-hidden="true">/</span>
+            <span>{{ project.title }}</span>
+        </div>
+
+        <div class="project-grid">
+            <!-- Main -->
+            <div class="pd-card">
+                <div class="pd-hero">
+                    <div class="pd-hero-inner">
+                        <div>
+                            <h1 class="pd-title">{{ project.title }}</h1>
+                            <p class="pd-subtitle">
+                                {% if project.location %}{{ project.location }}{% else %}Projet BTP{% endif %}
+                                {% if project.client %} · {{ project.client }}{% endif %}
+                            </p>
+                            <div class="pd-chips">
+                                {% if project.status == 'en_cours' %}
+                                    <span class="pd-chip pd-chip--warning">
+                                        <span aria-hidden="true">⏳</span> {{ project.get_status_display }}
+                                    </span>
+                                {% else %}
+                                    <span class="pd-chip pd-chip--success">
+                                        <span aria-hidden="true">✓</span> {{ project.get_status_display }}
+                                    </span>
+                                {% endif %}
+                                {% if project.start_date %}
+                                    <span class="pd-chip">
+                                        <span aria-hidden="true">📅</span> {{ project.start_date|date:"d/m/Y" }}
+                                    </span>
+                                {% endif %}
+                                {% if project.duration %}
+                                    <span class="pd-chip">
+                                        <span aria-hidden="true">⏱</span> {{ project.duration }}
+                                    </span>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="pd-media">
+                            {% if project.image %}
+                                <img src="{{ project.image.url }}" alt="{{ project.title }}">
+                            {% else %}
+                                <div class="pd-media-placeholder" aria-hidden="true">🏗️</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pd-content">
+                    <h2 class="pd-section-title">Description</h2>
+                    <div class="pd-prose">
+                        {{ project.description|linebreaks }}
+                    </div>
+
+                    {% if project.completion_info and project.status == 'realise' %}
+                        <div class="pd-callout">
+                            <div class="pd-section-title" style="margin-bottom: 8px;">Réalisation</div>
+                            <div class="pd-prose">{{ project.completion_info|linebreaks }}</div>
+                        </div>
+                    {% endif %}
+
+                    {% if project.images.count %}
+                        <div class="pd-gallery">
+                            <h2 class="pd-section-title">📸 Galerie photos</h2>
+                            <div class="pd-gallery-grid">
+                                {% for image in project.images.all %}
+                                    <div data-caption="{{ image.caption|default:'' }}">
+                                        <a href="{{ image.image.url }}" data-caption="{{ image.caption|default:'' }}" aria-label="Voir l'image en grand">
+                                            <div class="pd-thumb">
+                                                <img src="{{ image.image.url }}" alt="{{ image.caption|default:project.title }}" loading="lazy">
+                                            </div>
+                                        </a>
+                                        {% if image.caption %}
+                                            <div class="pd-caption">{{ image.caption }}</div>
+                                        {% endif %}
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Sidebar -->
+            <aside class="pd-sidebar">
+                <div class="pd-card pd-card--accent">
+                    <div class="pd-side-header">Détails du projet</div>
+
+                    {% if project.client %}
+                        <div class="pd-kv">
+                            <div class="pd-k">Client</div>
+                            <div class="pd-v">{{ project.client }}</div>
+                        </div>
+                    {% endif %}
+
+                    {% if project.location %}
+                        <div class="pd-kv">
+                            <div class="pd-k">Lieu</div>
+                            <div class="pd-v">{{ project.location }}</div>
+                        </div>
+                    {% endif %}
+
+                    {% if project.contract_details %}
+                        <div class="pd-kv">
+                            <div class="pd-k">Contrat</div>
+                            <div class="pd-v">{{ project.contract_details }}</div>
+                        </div>
+                    {% endif %}
+
+                    {% if project.duration %}
+                        <div class="pd-kv">
+                            <div class="pd-k">Durée d'exécution</div>
+                            <div class="pd-v">{{ project.duration }}</div>
+                        </div>
+                    {% endif %}
+
+                    {% if project.start_date %}
+                        <div class="pd-kv">
+                            <div class="pd-k">Date de début</div>
+                            <div class="pd-v">{{ project.start_date|date:"d F Y" }}</div>
+                        </div>
+                    {% endif %}
+
+                    {% if project.completion_date %}
+                        <div class="pd-kv">
+                            <div class="pd-k">Date de fin / Livraison</div>
+                            <div class="pd-v">{{ project.completion_date|date:"d F Y" }}</div>
+                        </div>
+                    {% endif %}
+                </div>
+
+                {% if project.company %}
+                    <div class="pd-card pd-card--accent">
+                        <div class="pd-side-header">Partenaire</div>
+                        <div class="pd-partner">
+                            {% if project.company.logo %}
+                                <img src="{{ project.company.logo.url }}" alt="{{ project.company.name }}">
+                            {% endif %}
+                            <div style="font-weight: 900; color: rgba(0,0,0,0.84);">{{ project.company.name }}</div>
+                            <a class="btn btn-primary btn-sm" href="{% url 'website:company_detail' project.company.slug %}">Voir le profil</a>
+                        </div>
+                    </div>
+                {% endif %}
+            </aside>
+        </div>
+
+        {% if related_projects %}
+            <div class="pd-related">
+                <div class="pd-related-header">
+                    <h3 class="pd-related-title">Autres projets</h3>
+                    <p class="pd-related-subtitle">Découvrez d'autres réalisations d'IBC SARL et ses partenaires</p>
+                </div>
+
+                <div class="pd-related-grid">
+                    {% for related in related_projects %}
+                        <article class="pd-related-card">
+                            <div class="pd-related-img">
+                                {% if related.image %}
+                                    <img src="{{ related.image.url }}" alt="{{ related.title }}">
+                                {% else %}
+                                    <div class="pd-media-placeholder" aria-hidden="true">🏗️</div>
+                                {% endif %}
+                            </div>
+                            <div class="pd-related-body">
+                                <a href="{% url 'website:project_detail' related.slug %}">{{ related.title }}</a>
+                                <div class="pd-related-meta">
+                                    {% if related.start_date %}📅 {{ related.start_date|date:"d/m/Y" }}{% endif %}
+                                </div>
+                            </div>
+                        </article>
+                    {% endfor %}
+                </div>
+
+                <div class="pd-cta">
+                    <a href="{% url 'website:project_list' %}">Voir tous les projets</a>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</section>
+
+{% block extra_js %}
+<script src="{% static 'js/lightbox.js' %}?v=1"></script>
+{% endblock %}
+{% endblock %}

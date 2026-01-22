@@ -1,23 +1,30 @@
 {% extends 'website/base.html' %}
 {% load static %}
 
-{% block title %}Nos Groupements - AZI GROUP{% endblock %}
+{% block title %}Nos Partenaires - IBC Sarl BTP{% endblock %}
 
 {% block content %}
-<!-- Hero Section avec image dynamique -->
-{% if hero_section %}
-<section class="hero companies-hero" style="background-image: url('{{ hero_section.background_image.url }}'); background-size: cover; background-position: center; background-repeat: no-repeat;">
+<!-- Hero Section avec logo de navigation -->
+{% if navbar_logo_url %}
+<section class="hero companies-hero" style="background-image: url('{{ navbar_logo_url }}'); background-size: cover; background-position: center; background-repeat: no-repeat;">
     <div class="companies-overlay">
-        <h1>Nos Groupements</h1>
-        <p>Découvrez nos entreprises spécialisées</p>
+        <h1>Nos Partenaires</h1>
+        <p>Découvrez nos partenaires spécialisés</p>
+    </div>
+</section>
+{% elif navigation_logo and navigation_logo.logo %}
+<section class="hero companies-hero" style="background-image: url('{{ navigation_logo.logo.url }}'); background-size: cover; background-position: center; background-repeat: no-repeat;">
+    <div class="companies-overlay">
+        <h1>Nos Partenaires</h1>
+        <p>Découvrez nos partenaires spécialisés</p>
     </div>
 </section>
 {% else %}
-<!-- Fallback si aucune section hero n'est configurée -->
-<section class="hero companies-hero" style="background-image: url('{% static 'images/AZI GROUP.PNG' %}'); background-size: cover; background-position: center; background-repeat: no-repeat;">
+<!-- Fallback si aucun logo n'est configuré -->
+<section class="hero companies-hero" style="background: linear-gradient(135deg, #E45B40 0%, #CC4D3D 100%);">
     <div class="companies-overlay">
-        <h1>Nos Groupements</h1>
-        <p>Découvrez nos entreprises spécialisées</p>
+        <h1>Nos Partenaires</h1>
+        <p>Découvrez nos partenaires spécialisés</p>
     </div>
 </section>
 {% endif %}
@@ -38,25 +45,29 @@
             <div class="company-content">
                 <h3>{{ company.icon }} {{ company.name }}</h3>
                 <p><strong>{{ company.description }}</strong></p>
-                
+
                 <h4>Domaines clés</h4>
                 <ul>
                     {% for service in company.get_services_list %}
                     <li>{{ service }}</li>
                     {% endfor %}
                 </ul>
-                
+
                 <h4>KPI Cibles</h4>
                 <ul>
                     {% for kpi in company.get_kpis_list %}
                     <li>{{ kpi }}</li>
                     {% endfor %}
                 </ul>
-                
+
                 <div class="company-actions">
                     <a href="{% url 'website:company_detail' company.slug %}" class="btn btn-primary">En savoir plus</a>
                 </div>
             </div>
+        </div>
+        {% empty %}
+        <div class="no-data">
+            Aucune entreprise partenaire n'est encore enregistrée.
         </div>
         {% endfor %}
     </div>

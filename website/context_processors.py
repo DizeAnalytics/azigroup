@@ -6,13 +6,8 @@ def navigation_logo(request):
     active_hero = HomePageHero.get_active_hero()
 
     navbar_logo_url = None
-    if active_hero and getattr(active_hero, 'background_image', None):
-        try:
-            navbar_logo_url = active_hero.background_image.url
-        except Exception:
-            navbar_logo_url = None
-
-    if not navbar_logo_url and active_logo and getattr(active_logo, 'logo', None):
+    # Priorité au logo de navigation (pas au background_image du hero)
+    if active_logo and getattr(active_logo, 'logo', None):
         try:
             navbar_logo_url = active_logo.logo.url
         except Exception:
@@ -25,4 +20,5 @@ def navigation_logo(request):
         'navigation_logo': active_logo,
         'navbar_logo_url': navbar_logo_url,
         'companies': companies,
+        'hero_section': active_hero,  # Ajouter le hero pour utilisation dans les templates
     }

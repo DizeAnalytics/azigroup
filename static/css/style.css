@@ -1,4 +1,4 @@
-/* Styles de base du site AZI GROUP */
+/* Styles de base du site IBC Sarl BTP */
 * {
     margin: 0;
     padding: 0;
@@ -13,7 +13,7 @@ body {
 
 /* Header */
 header {
-    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+    background: #CC4D3D !important;
     color: white;
     padding: 1rem 0;
     position: fixed;
@@ -61,7 +61,7 @@ nav {
 
 /* Section de présentation */
 .presentation-section {
-    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+    background: #E45B40;
     color: white;
     padding: 4rem 2rem;
     text-align: center;
@@ -76,7 +76,8 @@ nav {
     font-size: 3rem;
     margin-bottom: 1rem;
     font-weight: bold;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    color: #E45B40 !important;
+    text-shadow: none;
 }
 
 .presentation-subtitle {
@@ -100,7 +101,8 @@ nav {
 }
 
 .nav-links a:hover {
-    color: #ffd700;
+    color: rgba(255, 255, 255, 0.9);
+    text-decoration: underline;
 }
 
 /* Hamburger Menu */
@@ -109,6 +111,9 @@ nav {
     flex-direction: column;
     cursor: pointer;
     gap: 5px;
+    background: transparent;
+    border: 0;
+    padding: 0.25rem;
 }
 
 .hamburger span {
@@ -118,6 +123,12 @@ nav {
     border-radius: 3px;
     transition: all 0.3s;
 }
+
+    .hamburger:focus-visible {
+        outline: 2px solid rgba(255, 255, 255, 0.9);
+        outline-offset: 4px;
+        border-radius: 8px;
+    }
 
 .hamburger.active span:nth-child(1) {
     transform: rotate(45deg) translate(8px, 8px);
@@ -172,7 +183,7 @@ nav {
 
 /* Hero Section */
 .hero {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #E45B40 0%, #CC4D3D 100%);
     color: white;
     padding: 150px 2rem 100px;
     text-align: center;
@@ -331,7 +342,7 @@ nav {
 }
 
 .about-hero-content h1 {
-    color: #1e3c72;
+    color: #E45B40;
     font-size: 2.5rem;
     margin-bottom: 1rem;
     font-weight: bold;
@@ -418,6 +429,23 @@ nav {
     padding-left: 2rem;
 }
 
+/* Overlay sombre pour améliorer la lisibilité quand une image de fond est utilisée */
+.companies-hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 0;
+}
+
+.companies-hero > * {
+    position: relative;
+    z-index: 1;
+}
+
 .companies-overlay {
     background: rgba(255, 255, 255, 0.15);
     padding: 3rem 2rem;
@@ -482,7 +510,7 @@ section {
     text-align: center;
     font-size: 2.5rem;
     margin-bottom: 3rem;
-    color: #1e3c72;
+    color: #E45B40 !important;
     position: relative;
     padding-bottom: 15px;
 }
@@ -495,7 +523,7 @@ section {
     transform: translateX(-50%);
     width: 100px;
     height: 4px;
-    background: linear-gradient(90deg, #667eea, #764ba2);
+    background: linear-gradient(90deg, #E45B40, #CC4D3D);
     border-radius: 2px;
 }
 
@@ -510,7 +538,7 @@ section {
 }
 
 .about-content h2 {
-    color: #1e3c72;
+    color: #E45B40;
     margin: 2rem 0 1rem;
     font-size: 1.8rem;
 }
@@ -537,7 +565,7 @@ section {
 }
 
 .value-card h3 {
-    color: #1e3c72;
+    color: #E45B40;
     margin-bottom: 1rem;
 }
 
@@ -569,7 +597,7 @@ section {
 }
 
 .service-card h3 {
-    color: #1e3c72;
+    color: #E45B40;
     margin-bottom: 1rem;
     font-size: 1.5rem;
 }
@@ -602,7 +630,7 @@ section {
 .company-image {
     width: 100%;
     height: 250px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #E45B40 0%, #CC4D3D 100%);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -660,13 +688,13 @@ section {
 }
 
 .company-content h3 {
-    color: #1e3c72;
+    color: #E45B40;
     margin-bottom: 1rem;
     font-size: 1.8rem;
 }
 
 .company-content h4 {
-    color: #667eea;
+    color: #708090;
     margin: 1.5rem 0 0.5rem;
     font-size: 1.2rem;
 }
@@ -686,7 +714,7 @@ section {
     content: '✓';
     position: absolute;
     left: 0;
-    color: #667eea;
+    color: #E45B40;
     font-weight: bold;
 }
 
@@ -725,7 +753,7 @@ section {
 .news-placeholder {
     width: 100%;
     height: 100%;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #E45B40 0%, #CC4D3D 100%);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -737,8 +765,42 @@ section {
     padding: 1.5rem;
 }
 
+/* Galerie d'images sous chaque actualité */
+.news-gallery {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0.75rem;
+    margin-top: 1rem;
+}
+
+.news-gallery-item {
+    border-radius: 10px;
+    overflow: hidden;
+    background: rgba(0,0,0,0.05);
+    aspect-ratio: 16 / 10;
+}
+
+.news-gallery-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+@media (max-width: 768px) {
+    .news-gallery {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 420px) {
+    .news-gallery {
+        grid-template-columns: 1fr;
+    }
+}
+
 .news-content h3 {
-    color: #1e3c72;
+    color: #E45B40;
     margin-bottom: 1rem;
     font-size: 1.3rem;
 }
@@ -749,7 +811,7 @@ section {
 }
 
 .news-content h3 a:hover {
-    color: #667eea;
+    color: #CC4D3D;
 }
 
 .news-excerpt {
@@ -771,7 +833,7 @@ section {
 }
 
 .read-more {
-    color: #667eea;
+    color: #E45B40;
     text-decoration: none;
     font-weight: 600;
 }
@@ -817,12 +879,12 @@ section {
 }
 
 .news-item h2 a {
-    color: #1e3c72;
+    color: #E45B40;
     text-decoration: none;
 }
 
 .news-item h2 a:hover {
-    color: #667eea;
+    color: #CC4D3D;
 }
 
 /* News Detail */
@@ -861,7 +923,7 @@ section {
 
 .news-activity-title {
     font-size: 2rem;
-    color: #1e3c72;
+    color: #E45B40;
     margin-bottom: 0.5rem;
     font-weight: 600;
     letter-spacing: 2px;
@@ -894,14 +956,18 @@ section {
 
 /* Contact Section */
 .contact-section {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #E45B40 0%, #CC4D3D 100%);
     color: white;
     padding: 80px 2rem;
 }
 
 .contact-container {
-    max-width: 800px;
+    max-width: 1100px;
     margin: 0 auto;
+    display: grid;
+    grid-template-columns: minmax(0, 2fr) minmax(0, 1.2fr);
+    gap: 2.5rem;
+    align-items: flex-start;
 }
 
 .contact-form {
@@ -918,7 +984,7 @@ section {
 .form-group label {
     display: block;
     margin-bottom: 0.5rem;
-    color: #1e3c72;
+    color: #E45B40;
     font-weight: 600;
 }
 
@@ -937,7 +1003,7 @@ section {
 .form-group textarea:focus,
 .form-group select:focus {
     outline: none;
-    border-color: #667eea;
+    border-color: #E45B40;
 }
 
 .form-group textarea {
@@ -946,7 +1012,7 @@ section {
 }
 
 .submit-btn {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #E45B40 0%, #CC4D3D 100%);
     color: white;
     padding: 1rem 3rem;
     border: none;
@@ -960,12 +1026,18 @@ section {
 
 .submit-btn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+    box-shadow: 0 10px 25px rgba(228, 91, 64, 0.4);
 }
 
 .contact-info {
-    margin-top: 3rem;
-    text-align: center;
+    margin-top: 0;
+    background: rgba(0, 0, 0, 0.15);
+    border-radius: 20px;
+    padding: 2.5rem 2rem;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    text-align: left;
 }
 
 .contact-info-item {
@@ -974,7 +1046,8 @@ section {
 }
 
 .contact-info-item strong {
-    color: #ffd700;
+    color: #ffffff;
+    font-weight: 600;
 }
 
 /* Buttons */
@@ -990,13 +1063,13 @@ section {
 }
 
 .btn-primary {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #E45B40 0%, #CC4D3D 100%);
     color: white;
 }
 
 .btn-primary:hover {
     transform: translateY(-2px);
-    box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+    box-shadow: 0 10px 25px rgba(228, 91, 64, 0.4);
 }
 
 .btn-secondary {
@@ -1011,7 +1084,7 @@ section {
 
 /* Footer */
 footer {
-    background: #1a1a2e;
+    background: #708090;
     color: white;
     padding: 3rem 2rem 1rem;
 }
@@ -1026,8 +1099,9 @@ footer {
 }
 
 .footer-section h3 {
-    color: #ffd700;
+    color: #ffffff;
     margin-bottom: 1rem;
+    font-weight: 600;
 }
 
 .footer-section ul {
@@ -1045,7 +1119,7 @@ footer {
 }
 
 .footer-section a:hover {
-    color: #ffd700;
+    color: #E45B40;
 }
 
 .footer-bottom {
@@ -1110,7 +1184,7 @@ footer {
 
 .stat-card h3 {
     font-size: 2.5rem;
-    color: #1e3c72;
+    color: #E45B40;
     margin-bottom: 0.5rem;
 }
 
@@ -1132,7 +1206,7 @@ footer {
 }
 
 .admin-section h2 {
-    color: #1e3c72;
+    color: #E45B40;
     margin-bottom: 2rem;
     font-size: 1.8rem;
 }
@@ -1157,7 +1231,7 @@ footer {
 .admin-table th {
     background: #f8f9fa;
     font-weight: 600;
-    color: #1e3c72;
+    color: #E45B40;
 }
 
 .admin-table tr:hover {
@@ -1257,7 +1331,7 @@ footer {
 }
 
 .admin-link h3 {
-    color: #1e3c72;
+    color: #E45B40;
     margin-bottom: 1rem;
 }
 
@@ -1285,7 +1359,7 @@ footer {
 
 .company-header h3,
 .news-header h3 {
-    color: #1e3c72;
+    color: #E45B40;
     margin: 0;
 }
 
@@ -1427,7 +1501,7 @@ footer {
 }
 
 .company-description-section h2 {
-    color: #1e3c72;
+    color: #E45B40;
     margin-bottom: 2rem;
     font-size: 2rem;
 }
@@ -1455,7 +1529,7 @@ footer {
 
 .services-section h3,
 .kpis-section h3 {
-    color: #1e3c72;
+    color: #E45B40;
     margin-bottom: 1.5rem;
     font-size: 1.5rem;
 }
@@ -1470,7 +1544,7 @@ footer {
 }
 
 .projects-section h2 {
-    color: #1e3c72;
+    color: #E45B40;
     margin-bottom: 2rem;
     font-size: 2rem;
     text-align: center;
@@ -1604,17 +1678,44 @@ footer {
         display: flex;
     }
 
+    /* Menu hamburger professionnel - menu latéral */
     .nav-links {
         position: fixed;
-        right: -100%;
-        top: 60px;
+        right: -320px;
+        top: 64px; /* sous le header */
+        max-height: calc(100vh - 64px);
+        height: auto;
         flex-direction: column;
-        background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-        width: 100%;
-        text-align: center;
-        transition: right 0.3s;
-        box-shadow: 0 10px 27px rgba(0,0,0,0.3);
-        padding: 2rem 0;
+        background: #CC4D3D;
+        width: 280px;
+        max-width: 85vw;
+        text-align: left;
+        transition: right 0.3s ease-in-out;
+        box-shadow: -5px 0 20px rgba(0,0,0,0.3);
+        padding: 0.75rem 0;
+        z-index: 999;
+        overflow-y: auto;
+        overflow-x: hidden;
+        border-top-left-radius: 16px;
+        border-bottom-left-radius: 16px;
+        /* Améliorer le scroll sur mobile */
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: thin;
+        scrollbar-color: rgba(255,255,255,0.3) transparent;
+    }
+
+    /* Style de la scrollbar pour WebKit (Chrome, Safari) */
+    .nav-links::-webkit-scrollbar {
+        width: 4px;
+    }
+
+    .nav-links::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    .nav-links::-webkit-scrollbar-thumb {
+        background: rgba(255,255,255,0.3);
+        border-radius: 2px;
     }
 
     .nav-links.active {
@@ -1622,8 +1723,85 @@ footer {
     }
 
     .nav-links li {
-        padding: 1rem 0;
+        padding: 0.6rem 1.5rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 0;
     }
+
+    .nav-links li:last-child {
+        border-bottom: none;
+    }
+
+    .nav-links a {
+        display: block;
+        padding: 0.4rem 0;
+        font-size: 1rem;
+        line-height: 1.4;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    
+    /* Réduire l'espacement pour les boutons de navigation */
+    .nav-links .nav-btn {
+        padding: 0.5rem 0.75rem;
+        margin: 0.25rem 0;
+        font-size: 0.95rem;
+        text-align: center;
+        border-radius: 6px;
+    }
+
+    /* Overlay sombre derrière le menu */
+    .nav-overlay {
+        display: none;
+        position: fixed;
+        top: 64px; /* sous le header */
+        left: 0;
+        width: 100%;
+        height: calc(100vh - 64px);
+        background: rgba(0,0,0,0.5);
+        z-index: 998;
+        opacity: 0;
+        transition: opacity 0.3s ease-in-out;
+    }
+
+    .nav-overlay.active {
+        display: block;
+        opacity: 1;
+    }
+}
+
+/* Styles pour très petits écrans (moins de 480px) */
+@media (max-width: 480px) {
+    .nav-links {
+        width: 260px;
+        max-width: 90vw;
+        padding: 0.5rem 0;
+    }
+    
+    .nav-links li {
+        padding: 0.5rem 1.25rem;
+    }
+    
+    .nav-links a {
+        font-size: 0.95rem;
+        padding: 0.35rem 0;
+    }
+    
+    .nav-links .nav-btn {
+        padding: 0.45rem 0.65rem;
+        font-size: 0.9rem;
+    }
+    
+    .hamburger {
+        padding: 0.2rem;
+    }
+    
+    .hamburger span {
+        width: 26px;
+        height: 2.5px;
+    }
+}
 
     .hero h1 {
         font-size: 2rem;
@@ -1701,6 +1879,10 @@ footer {
     .services-grid,
     .companies-grid,
     .news-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .contact-container {
         grid-template-columns: 1fr;
     }
 

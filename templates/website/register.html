@@ -1,0 +1,222 @@
+{% extends 'website/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}Inscription - IBC Sarl BTP{% endblock %}
+
+{% block extra_css %}
+<style>
+    .registration-section {
+        background: linear-gradient(135deg, #E45B40 0%, #CC4D3D 100%);
+        color: white;
+        padding: 80px 2rem;
+        min-height: calc(100vh - 60px);
+    }
+    .registration-container {
+        max-width: 600px;
+        margin: 0 auto;
+        background: white;
+        padding: 3rem;
+        border-radius: 20px;
+        box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    }
+    .registration-title {
+        text-align: center;
+        color: #E45B40;
+        margin-bottom: 2rem;
+        font-size: 2rem;
+        font-weight: 700;
+    }
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+    .form-group label {
+        display: block;
+        margin-bottom: 0.5rem;
+        color: #E45B40;
+        font-weight: 600;
+    }
+    .form-group input,
+    .form-group select {
+        width: 100%;
+        padding: 1rem;
+        border: 2px solid #e0e0e0;
+        border-radius: 10px;
+        font-size: 1rem;
+        transition: border-color 0.3s;
+    }
+    .form-group input:focus,
+    .form-group select:focus {
+        outline: none;
+        border-color: #E45B40;
+    }
+    .form-group small {
+        color: #666;
+        font-size: 0.875rem;
+        display: block;
+        margin-top: 0.25rem;
+    }
+    .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+    }
+    .login-link {
+        text-align: center;
+        margin-top: 20px;
+        padding-top: 20px;
+        border-top: 1px solid #e5e7eb;
+    }
+    .login-link p {
+        color: #666;
+    }
+    .login-link a {
+        color: #E45B40;
+        text-decoration: none;
+        font-weight: 600;
+    }
+    .login-link a:hover {
+        text-decoration: underline;
+    }
+    .submit-btn {
+        background: linear-gradient(135deg, #E45B40 0%, #CC4D3D 100%);
+        color: white;
+        padding: 1rem 3rem;
+        border: none;
+        border-radius: 50px;
+        font-size: 1.1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: transform 0.3s, box-shadow 0.3s;
+        width: 100%;
+        margin-top: 20px;
+    }
+    .submit-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px rgba(228, 91, 64, 0.4);
+    }
+    .text-danger {
+        color: #dc3545;
+        font-size: 0.9rem;
+        margin-top: 0.25rem;
+    }
+    .alert {
+        padding: 1rem;
+        margin-bottom: 1rem;
+        border-radius: 10px;
+    }
+    .alert-danger {
+        background: #f8d7da;
+        color: #721c24;
+        border: 1px solid #f5c6cb;
+    }
+    @media (max-width: 768px) {
+        .registration-container {
+            padding: 2rem 1.5rem;
+        }
+        .registration-title {
+            font-size: 1.5rem;
+        }
+        .form-row {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="registration-section">
+    <div class="registration-container">
+        <h1 class="registration-title">Créer un compte</h1>
+        
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+        
+        <form method="POST" class="registration-form">
+            {% csrf_token %}
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="{{ form.first_name.id_for_label }}">{{ form.first_name.label }}</label>
+                    {{ form.first_name }}
+                    {% if form.first_name.errors %}
+                        <div class="text-danger">{{ form.first_name.errors }}</div>
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    <label for="{{ form.last_name.id_for_label }}">{{ form.last_name.label }}</label>
+                    {{ form.last_name }}
+                    {% if form.last_name.errors %}
+                        <div class="text-danger">{{ form.last_name.errors }}</div>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="{{ form.email.id_for_label }}">{{ form.email.label }}</label>
+                    {{ form.email }}
+                    {% if form.email.errors %}
+                        <div class="text-danger">{{ form.email.errors }}</div>
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    <label for="{{ form.country.id_for_label }}">{{ form.country.label }}</label>
+                    {{ form.country }}
+                    {% if form.country.errors %}
+                        <div class="text-danger">{{ form.country.errors }}</div>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="{{ form.phone.id_for_label }}">{{ form.phone.label }}</label>
+                {{ form.phone }}
+                {% if form.phone.help_text %}
+                    <small class="form-text text-muted">{{ form.phone.help_text }}</small>
+                {% endif %}
+                {% if form.phone.errors %}
+                    <div class="text-danger">{{ form.phone.errors }}</div>
+                {% endif %}
+            </div>
+            
+            <div class="form-group">
+                <label for="{{ form.password1.id_for_label }}">{{ form.password1.label }}</label>
+                {{ form.password1 }}
+                {% if form.password1.help_text %}
+                    <small class="form-text text-muted">{{ form.password1.help_text }}</small>
+                {% endif %}
+                {% if form.password1.errors %}
+                    <div class="text-danger">{{ form.password1.errors }}</div>
+                {% endif %}
+            </div>
+            
+            <div class="form-group">
+                <label for="{{ form.password2.id_for_label }}">{{ form.password2.label }}</label>
+                {{ form.password2 }}
+                {% if form.password2.errors %}
+                    <div class="text-danger">{{ form.password2.errors }}</div>
+                {% endif %}
+            </div>
+            
+            {% if form.non_field_errors %}
+                <div class="alert alert-danger">
+                    {{ form.non_field_errors }}
+                </div>
+            {% endif %}
+            
+            <button type="submit" class="submit-btn">S'inscrire</button>
+        </form>
+        
+        <div class="login-link">
+            <p>Vous avez déjà un compte ? <a href="{% url 'website:login' %}">Connectez-vous</a></p>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -4,12 +4,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}AZI GROUP - Excellence Opérationnelle en Afrique de l'Ouest{% endblock %}</title>
+    <title>{% block title %}IBC Sarl BTP - Entreprise de BTP au Togo{% endblock %}</title>
     
     <!-- CSS -->
-    <link rel="stylesheet" href="{% static 'css/style.css' %}?v=7">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}?v=9">
     <style>
         /* Styles inline pour contourner le cache */
+        header {
+            background: #CC4D3D !important;
+        }
         .logo-link,
         .logo-link:visited,
         .logo-link:hover,
@@ -38,21 +41,91 @@
         .company-logo {
             padding: 0 !important;
         }
+        .section-title {
+            color: #E45B40 !important;
+        }
+        .presentation-title {
+            color: #E45B40 !important;
+        }
+        .nav-links {
+            background: #CC4D3D !important;
+        }
+        .nav-btn {
+            background: rgba(255, 255, 255, 0.2) !important;
+            border: 1px solid rgba(255, 255, 255, 0.3) !important;
+            border-radius: 6px !important;
+            padding: 8px 16px !important;
+            margin-left: 10px !important;
+            transition: all 0.3s ease !important;
+            font-weight: 600 !important;
+        }
+        .nav-btn:hover {
+            background: rgba(255, 255, 255, 0.3) !important;
+            border-color: rgba(255, 255, 255, 0.5) !important;
+            transform: translateY(-1px) !important;
+        }
+        .nav-btn-login {
+            color: #fff !important;
+        }
+        .nav-btn-logout {
+            color: #fff !important;
+            background: rgba(220, 53, 69, 0.3) !important;
+            border-color: rgba(220, 53, 69, 0.5) !important;
+        }
+        .nav-btn-logout:hover {
+            background: rgba(220, 53, 69, 0.5) !important;
+        }
+        .nav-user {
+            display: flex !important;
+            align-items: center !important;
+            gap: 10px !important;
+            margin-left: 10px !important;
+        }
+        .user-name {
+            color: rgba(255, 255, 255, 0.9) !important;
+            font-weight: 500 !important;
+            font-size: 0.9rem !important;
+        }
+        @media (max-width: 768px) {
+            .nav-user {
+                flex-direction: column !important;
+                align-items: flex-start !important;
+                margin-left: 0 !important;
+                padding: 10px 0 !important;
+                border-top: 1px solid rgba(255, 255, 255, 0.2) !important;
+            }
+            .nav-btn {
+                margin-left: 0 !important;
+                width: 100% !important;
+                text-align: center !important;
+            }
+        }
     </style>
     {% block extra_css %}{% endblock %}
     
     <!-- Meta tags pour le SEO -->
-    <meta name="description" content="{% block meta_description %}AZI Group - Excellence Opérationnelle au Service de l'Impact en Afrique de l'Ouest. Nos groupements : Global Songhoy Services, Sogis, Société Golden, Angnie Mali.{% endblock %}">
-    <meta name="keywords" content="{% block meta_keywords %}AZI Group, Mali, Afrique de l'Ouest, services, entreprise, infrastructure, développement{% endblock %}">
+    <meta name="description" content="{% block meta_description %}IBC Sarl BTP est une entreprise togolaise spécialisée en BTP : construction, réhabilitation et infrastructures avec un haut niveau d'exigence.{% endblock %}">
+    <meta name="keywords" content="{% block meta_keywords %}IBC Sarl BTP, BTP, Togo, Lomé, construction, infrastructure, bâtiment, travaux publics{% endblock %}">
     
     <!-- Open Graph -->
-    <meta property="og:title" content="{% block og_title %}AZI GROUP{% endblock %}">
-    <meta property="og:description" content="{% block og_description %}AZI Group - Excellence Opérationnelle au Service de l'Impact en Afrique de l'Ouest{% endblock %}">
+    <meta property="og:title" content="{% block og_title %}IBC Sarl BTP{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}IBC Sarl BTP - Entreprise togolaise spécialisée en BTP{% endblock %}">
     <meta property="og:type" content="website">
     <meta property="og:url" content="{{ request.build_absolute_uri }}">
     
-    <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="{% static 'images/favicon.ico' %}">
+    <!-- Favicon basé sur le logo de navigation actif -->
+    {% if navbar_logo_url %}
+    <link rel="icon" type="image/png" href="{{ navbar_logo_url }}">
+    <link rel="apple-touch-icon" href="{{ navbar_logo_url }}">
+    {% elif navigation_logo and navigation_logo.logo %}
+    <link rel="icon" type="image/png" href="{{ navigation_logo.logo.url }}">
+    <link rel="apple-touch-icon" href="{{ navigation_logo.logo.url }}">
+    {% else %}
+    <!-- Fallback (ancien favicon) -->
+    <link rel="icon" type="image/svg+xml" href="{% static 'images/favicon.svg' %}">
+    <link rel="alternate icon" href="{% static 'images/favicon.ico' %}">
+    <link rel="apple-touch-icon" href="{% static 'images/favicon.svg' %}">
+    {% endif %}
 </head>
 <body>
     <!-- Header -->
@@ -61,31 +134,44 @@
             <div class="logo">
                 <a href="{% url 'website:index' %}" class="logo-link" aria-label="Accueil">
                     {% if navbar_logo_url %}
-                    <img src="{{ navbar_logo_url }}" alt="{{ navigation_logo.name|default:'AZI GROUP' }}" class="logo-img">
-                    <span class="logo-text">{{ navigation_logo.name|default:'AZI GROUP' }}</span>
+                    <img src="{{ navbar_logo_url }}" alt="IBC SARL" class="logo-img">
+                    <span class="logo-text">IBC SARL</span>
                     {% elif navigation_logo and navigation_logo.logo %}
-                    <img src="{{ navigation_logo.logo.url }}" alt="{{ navigation_logo.name|default:'AZI GROUP' }}" class="logo-img">
-                    <span class="logo-text">{{ navigation_logo.name|default:'AZI GROUP' }}</span>
+                    <img src="{{ navigation_logo.logo.url }}" alt="IBC SARL" class="logo-img">
+                    <span class="logo-text">IBC SARL</span>
                     {% else %}
-                    <img src="{% static 'images/AZI GROUP.PNG' %}" alt="AZI GROUP" class="logo-img">
-                    <span class="logo-text">AZI GROUP</span>
+                    <img src="{% static 'images/logo-ibc.png' %}" alt="IBC SARL" class="logo-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline';">
+                    <span class="logo-text">IBC SARL</span>
                     {% endif %}
                 </a>
             </div>
-            <div class="hamburger" onclick="toggleMenu()">
+            <button class="hamburger" type="button" onclick="toggleMenu()" aria-label="Ouvrir le menu" aria-expanded="false">
                 <span></span>
                 <span></span>
                 <span></span>
-            </div>
+            </button>
             <ul class="nav-links">
                 <li><a href="{% url 'website:index' %}" onclick="closeMenu()">Accueil</a></li>
-                <li><a href="{% url 'website:about' %}" onclick="closeMenu()">À Propos</a></li>
-                <li><a href="{% url 'website:companies' %}" onclick="closeMenu()">Nos Groupements</a></li>
+                <li><a href="{% url 'website:about' %}" onclick="closeMenu()">À propos</a></li>
+                <li><a href="{% url 'website:companies' %}" onclick="closeMenu()">Nos Partenaires</a></li>
+                <li><a href="{% url 'website:project_list' %}" onclick="closeMenu()">Projets</a></li>
                 <li><a href="{% url 'website:news_list' %}" onclick="closeMenu()">Actualités</a></li>
                 <li><a href="{% url 'website:contact' %}" onclick="closeMenu()">Contact</a></li>
+                {% if user.is_authenticated %}
+                    {% if user.is_staff %}
+                    <li><a href="{% url 'website:dashboard' %}" class="nav-btn" onclick="closeMenu()">Tableau de bord</a></li>
+                    {% endif %}
+                    <li><a href="{% url 'website:logout' %}" class="nav-btn nav-btn-logout" onclick="closeMenu()">Déconnexion</a></li>
+                {% else %}
+                <li><a href="{% url 'website:login' %}" class="nav-btn nav-btn-login" onclick="closeMenu()">Se connecter</a></li>
+                {% endif %}
             </ul>
         </nav>
+        <!-- Overlay pour fermer le menu -->
+        <div class="nav-overlay" onclick="closeMenu()"></div>
     </header>
+    <!-- Overlay derrière le menu mobile (ne couvre pas le header) -->
+    <div class="nav-overlay" onclick="closeMenu()"></div>
 
     <!-- Messages Flash -->
     {% if messages %}
@@ -108,12 +194,12 @@
     <footer>
         <div class="footer-content">
             <div class="footer-section">
-                <h3>AZI GROUP</h3>
-                <p>Excellence opérationnelle au service de l'impact en Afrique de l'Ouest.</p>
+                <h3>IBC Sarl BTP</h3>
+                <p>Entreprise togolaise spécialisée en BTP : construction, réhabilitation et infrastructures.</p>
             </div>
 
             <div class="footer-section">
-                <h3>Nos Groupements</h3>
+                <h3>Nos Partenaires</h3>
                 <ul>
                     {% for company in companies %}
                     <li><a href="{% url 'website:company_detail' company.slug %}">{{ company.name }}</a></li>
@@ -125,8 +211,8 @@
                 <h3>Liens Rapides</h3>
                 <ul>
                     <li><a href="{% url 'website:index' %}">Accueil</a></li>
-                    <li><a href="{% url 'website:about' %}">À Propos</a></li>
-                    <li><a href="{% url 'website:companies' %}">Nos Groupements</a></li>
+                    <li><a href="{% url 'website:about' %}">À propos</a></li>
+                    <li><a href="{% url 'website:companies' %}">Nos Partenaires</a></li>
                     <li><a href="{% url 'website:news_list' %}">Actualités</a></li>
                     <li><a href="{% url 'website:contact' %}">Contact</a></li>
                 </ul>
@@ -143,7 +229,7 @@
         </div>
 
         <div class="footer-bottom">
-            <p>&copy; 2025 AZI GROUP. Tous droits réservés.</p>
+            <p>&copy; 2025 IBC Sarl BTP. Tous droits réservés.</p>
         </div>
     </footer>
 

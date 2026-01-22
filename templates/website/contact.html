@@ -1,7 +1,7 @@
 {% extends 'website/base.html' %}
 {% load static %}
 
-{% block title %}Contact - AZI GROUP{% endblock %}
+{% block title %}Contact - IBC Sarl BTP{% endblock %}
 
 {% block extra_css %}
 {% endblock %}
@@ -13,19 +13,24 @@
 {% elif navigation_logo and navigation_logo.logo %}
 <section class="hero contact-hero" style="background-image: url('{{ navigation_logo.logo.url }}'); background-size: cover; background-position: center; background-repeat: no-repeat;">
 {% else %}
-<section class="hero contact-hero" style="background-image: url('{% static 'images/AZI GROUP.PNG' %}'); background-size: cover; background-position: center; background-repeat: no-repeat;">
+<section class="hero contact-hero" style="background: linear-gradient(135deg, #E45B40 0%, #CC4D3D 100%);">
 {% endif %}
     <div class="contact-overlay">
-        <h1>Contactez-Nous</h1>
-        <p>Nous sommes là pour répondre à vos besoins</p>
+        <h1>Contactez IBC Sarl BTP</h1>
+        <p>Entreprise togolaise spécialisée en BTP, nous sommes là pour répondre à vos besoins</p>
     </div>
 </section>
 
 <section class="contact-section">
     <div class="contact-container">
-        <h2 class="section-title" style="color: white;">Contactez-Nous</h2>
-        
         <form class="contact-form" method="POST" action="{% url 'website:contact' %}">
+            <h2 class="section-title" style="color: #E45B40; text-align:left; margin-top:0;">
+                Contactez-nous
+            </h2>
+            <p style="margin-bottom:2rem; color:#555;">
+                Dites-nous en plus sur votre projet de construction, de réhabilitation ou d’infrastructure.
+                Nous vous répondrons rapidement avec une proposition adaptée.
+            </p>
             {% csrf_token %}
             <div class="form-group">
                 <label for="name">Nom complet *</label>
@@ -39,7 +44,8 @@
 
             <div class="form-group">
                 <label for="phone">Téléphone</label>
-                <input type="tel" id="phone" name="phone" value="{{ form.phone.value|default:'' }}">
+                <input type="tel" id="phone" name="phone" value="{{ form.phone.value|default:'' }}" placeholder="+228 XX XX XX XX" pattern="\+[0-9\s\-\(\)]+">
+                <small style="color: #666; font-size: 0.9em;">Format: +228 XX XX XX XX (avec indicatif du pays)</small>
             </div>
 
             <div class="form-group">
@@ -51,7 +57,7 @@
                 <label for="service">Service concerné</label>
                 <select id="service" name="service">
                     <option value="">-- Sélectionnez --</option>
-                    <option value="azi_group" {% if form.service.value == 'azi_group' %}selected{% endif %}>AZI GROUP</option>
+                    <option value="azi_group" {% if form.service.value == 'azi_group' %}selected{% endif %}>IBC SARL BTP</option>
                     <option value="gss" {% if form.service.value == 'gss' %}selected{% endif %}>Global Songhoy Services (GSS)</option>
                     <option value="sogis" {% if form.service.value == 'sogis' %}selected{% endif %}>Sogis - Immobilier</option>
                     <option value="golden" {% if form.service.value == 'golden' %}selected{% endif %}>Société Golden - Transport</option>
@@ -79,17 +85,25 @@
             <button type="submit" class="submit-btn">Envoyer le message</button>
         </form>
 
-        <div class="contact-info">
+        <aside class="contact-info">
             <div class="contact-info-item">
-                <strong>📍 Adresse :</strong> Mali, Afrique de l'Ouest
+                <strong>📍 Adresse :</strong><br>
+                {{ contact_info.address }}<br>
+                {% if contact_info.address_details %}{{ contact_info.address_details }}{% endif %}
             </div>
             <div class="contact-info-item">
-                <strong>📧 Email :</strong> contact@azigroup.com
+                <strong>📧 Email :</strong><br>
+                {{ contact_info.email }}
             </div>
             <div class="contact-info-item">
-                <strong>📞 Téléphone :</strong> +223 XX XX XX XX
+                <strong>📞 Téléphone :</strong><br>
+                {{ contact_info.phone }}
             </div>
-        </div>
+            <div class="contact-info-item">
+                <strong>🕒 Horaires :</strong><br>
+                {{ contact_info.hours }}
+            </div>
+        </aside>
     </div>
 </section>
 {% endblock %}
